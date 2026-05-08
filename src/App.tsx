@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { motion, useScroll, useTransform, AnimatePresence } from "motion/react";
+import { motion, useScroll, useTransform, AnimatePresence, Variants } from "motion/react";
 import { 
   ArrowUpRight, 
   Menu, 
@@ -27,6 +27,8 @@ import MusicPlayer, { TRACKS } from "./components/MusicPlayer";
 import MiniPlayer from "./components/MiniPlayer";
 import Visualizer, { VisualizerStyle, VisualizerColor } from "./components/Visualizer";
 import Tooltip from "./components/Tooltip";
+import HeavyArchiveCarousel from "./components/HeavyArchiveCarousel";
+import StudioGearVisualizer from "./components/StudioGearVisualizer";
 import { getVisualAdjustments, VisualAdjustments } from "./services/geminiVisualService";
 
 import CustomCursor from "./components/CustomCursor";
@@ -36,7 +38,6 @@ import HeartbeatWaves from "./components/HeartbeatWaves";
 import SmoothScroll from "./components/SmoothScroll";
 import FireEffect from "./components/FireEffect";
 import DestructionEffect from "./components/DestructionEffect";
-import OrbitingAlbums from "./components/OrbitingAlbums";
 
 const PROJECTS = [
   { id: 1, title: "Sonic Architecture", category: "Trap Music", year: 2026, description: "Minimalist trap beats combined with heavy, metallic industrial soundscapes, exploring harsh textures in contemporary music.", image: "https://images.unsplash.com/photo-1614728263952-84ea256f9679?auto=format&fit=crop&q=80&w=1000" },
@@ -57,7 +58,7 @@ const PRESETS = [
   { name: "Crimson Waves", style: "bars" as VisualizerStyle, color: "crimson" as VisualizerColor, adjustments: { particleSpeed: 6, colorHue: 0, patternComplexity: 5 } },
 ];
 
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -67,7 +68,7 @@ const containerVariants = {
   },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 50, scale: 0.9 },
   visible: { 
     opacity: 1, 
@@ -75,8 +76,8 @@ const itemVariants = {
     scale: 1,
     transition: {
       duration: 1.0,
-      ease: [0.22, 1, 0.36, 1],
-    },
+      ease: [0.22, 1, 0.36, 1] as const,
+    } as any,
   },
 };
 
@@ -210,7 +211,7 @@ const RevealText = ({
 }) => {
   const words = text.split(" ");
   
-  const container = {
+  const container: Variants = {
     hidden: { opacity: 0 },
     visible: (i = 1) => ({
       opacity: 1,
@@ -221,13 +222,13 @@ const RevealText = ({
     }),
   };
 
-  const child = {
+  const child: Variants = {
     visible: {
       opacity: 1,
       y: 0,
       rotateX: 0,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         damping: 25,
         stiffness: 200,
       },
@@ -237,7 +238,7 @@ const RevealText = ({
       y: 40,
       rotateX: -90,
       transition: {
-        type: "spring",
+        type: "spring" as const,
         damping: 25,
         stiffness: 200,
       },
@@ -625,9 +626,6 @@ export default function App() {
         </div>
       </motion.section>
 
-      {/* Orbiting Section */}
-      <OrbitingAlbums />
-
       {/* Music Section (Immersive) */}
       <motion.section 
         initial={{ borderTopColor: "rgba(255,255,255,0)" }}
@@ -650,7 +648,7 @@ export default function App() {
         >
           <div className="mb-20 text-center">
             <RevealText 
-              text="03 / Auditory" 
+              text="02 / Auditory" 
               className="text-white text-[10px] uppercase tracking-[0.4em] font-bold mb-6 opacity-40 flex justify-center"
             />
             <RevealText 
@@ -806,6 +804,26 @@ export default function App() {
           </div>
         </motion.div>
       </motion.section>
+
+      <HeavyArchiveCarousel />
+
+      {/* Showroom Section */}
+      <section className="py-32 px-4 sm:px-8 lg:px-12 relative z-10">
+        <div className="max-w-[1800px] mx-auto">
+          <div className="mb-20 px-4">
+            <RevealText 
+              text="03 / Hardware" 
+              className="text-white text-[10px] uppercase tracking-[0.4em] font-bold mb-4 opacity-40 text-left justify-start"
+            />
+            <RevealText 
+              text="EQUIPMENT SHOWROOM" 
+              className="text-5xl sm:text-7xl font-display font-light tracking-tighter text-white text-left justify-start uppercase"
+              delay={0.1}
+            />
+          </div>
+          <StudioGearVisualizer />
+        </div>
+      </section>
 
       {/* Footer */}
       <footer id="contact" className="py-32 px-8 sm:px-16 lg:px-32 border-t border-white/5 relative z-10 overflow-hidden">

@@ -39,16 +39,6 @@
   }
 }
 
-.preserve-3d {
-  transform-style: preserve-3d;
-}
-
-@layer utilities {
-  .backface-hidden {
-    backface-visibility: hidden;
-  }
-}
-
 .liquid-mesh {
   position: fixed;
   inset: 0;
