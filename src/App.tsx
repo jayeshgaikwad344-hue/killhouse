@@ -40,16 +40,16 @@ import DestructionEffect from "./components/DestructionEffect";
 import { soundService } from "./services/soundService";
 
 const PROJECTS = [
-  { id: 1, title: "Sonic Architecture", category: "Trap Music", year: 2026, description: "Minimalist trap beats combined with heavy, metallic industrial soundscapes, exploring harsh textures in contemporary music.", image: "/src/assets/images/regenerated_image_1777993089103.png" },
-  { id: 2, title: "Echo Chamber", category: "Installation", year: 2025, description: "An immersive audio-visual installation that explores the relationship between architectural space and acoustic decay over time.", image: "/src/assets/images/regenerated_image_1777992676397.png" },
-  { id: 3, title: "Digital Distortion", category: "Visualizer", year: 2026, description: "A highly reactive audio-visualizer that transforms raw frequency data into complex, glitch-style 3D geometries in real-time.", image: "/src/assets/images/regenerated_image_1777993250191.jpg" },
-  { id: 4, title: "Analog Soul", category: "Identity", year: 2025, description: "A comprehensive brand identity project using retro-futuristic aesthetics to define a new sound studio's presence in the digital age.", image: "/src/assets/images/regenerated_image_1777993379890.png" },
-  { id: 5, title: "Isolated Frequencies", category: "Audio Gear", year: 2026, description: "Designing hardware and software interfaces for sound engineers specifically to isolate and analyze high-frequency artifacts in complex mixes.", image: "/src/assets/images/regenerated_image_1778003364123.png" },
-  { id: 6, title: "Monochrome Melodies", category: "Photography", year: 2024, description: "A series of black and white photography captured during live shows, focusing on the intersection of human movement and sound.", image: "/src/assets/images/regenerated_image_1778003709456.png" },
-  { id: 7, title: "Resonance", category: "Branding", year: 2025, description: "Developing a visual system for a music festival that reflects the sonic characteristics of its headlining electronic artists.", image: "/src/assets/images/regenerated_image_1778004316605.png" },
-  { id: 8, title: "The Circuit", category: "Event Design", year: 2026, description: "Design work for a series of underground events focused on minimalism and structured auditory experiences.", image: "/src/assets/images/regenerated_image_1778004441183.png" },
-  { id: 9, title: "Output Control", category: "Interface", year: 2025, description: "UX/UI design for an intuitive, touch-based audio mixing interface designed for live performances.", image: "/src/assets/images/regenerated_image_1778032201676.png" },
-  { id: 10, title: "Synth Waves", category: "Motion", year: 2026, description: "Motion graphics series exploring frequency visualization and modular synth concepts.", image: "/src/assets/images/regenerated_image_1778032298158.png" },
+  { id: 1, title: "Sonic Architecture", category: "Trap Music", year: 2026, description: "Minimalist trap beats combined with heavy, metallic industrial soundscapes, exploring harsh textures in contemporary music.", image: "/assets/images/regenerated_image_1777993089103.png" },
+  { id: 2, title: "Echo Chamber", category: "Installation", year: 2025, description: "An immersive audio-visual installation that explores the relationship between architectural space and acoustic decay over time.", image: "/assets/images/regenerated_image_1777992676397.png" },
+  { id: 3, title: "Digital Distortion", category: "Visualizer", year: 2026, description: "A highly reactive audio-visualizer that transforms raw frequency data into complex, glitch-style 3D geometries in real-time.", image: "/assets/images/regenerated_image_1777993250191.jpg" },
+  { id: 4, title: "Analog Soul", category: "Identity", year: 2025, description: "A comprehensive brand identity project using retro-futuristic aesthetics to define a new sound studio's presence in the digital age.", image: "/assets/images/regenerated_image_1777993379890.png" },
+  { id: 5, title: "Isolated Frequencies", category: "Audio Gear", year: 2026, description: "Designing hardware and software interfaces for sound engineers specifically to isolate and analyze high-frequency artifacts in complex mixes.", image: "/assets/images/regenerated_image_1778003364123.png" },
+  { id: 6, title: "Monochrome Melodies", category: "Photography", year: 2024, description: "A series of black and white photography captured during live shows, focusing on the intersection of human movement and sound.", image: "/assets/images/regenerated_image_1778003709456.png" },
+  { id: 7, title: "Resonance", category: "Branding", year: 2025, description: "Developing a visual system for a music festival that reflects the sonic characteristics of its headlining electronic artists.", image: "/assets/images/regenerated_image_1778004316605.png" },
+  { id: 8, title: "The Circuit", category: "Event Design", year: 2026, description: "Design work for a series of underground events focused on minimalism and structured auditory experiences.", image: "/assets/images/regenerated_image_1778004441183.png" },
+  { id: 9, title: "Output Control", category: "Interface", year: 2025, description: "UX/UI design for an intuitive, touch-based audio mixing interface designed for live performances.", image: "/assets/images/regenerated_image_1778032201676.png" },
+  { id: 10, title: "Synth Waves", category: "Motion", year: 2026, description: "Motion graphics series exploring frequency visualization and modular synth concepts.", image: "https://detailed-yellow-vfmcmbhdnq.edgeone.dev/Killhouse%20-%20Lost%20Within%20(1).png" },
 ];
 
 const PRESETS = [
@@ -89,16 +89,16 @@ const SIDE_QUESTS = [
 ];
 
 const MUSIC_IMAGES = [
-  "/src/assets/images/regenerated_image_1777992676397.png",
-  "/src/assets/images/regenerated_image_1777993089103.png",
-  "/src/assets/images/regenerated_image_1777993250191.jpg",
-  "/src/assets/images/regenerated_image_1777993379890.png",
-  "/src/assets/images/regenerated_image_1778003364123.png",
+  "/assets/images/regenerated_image_1777992676397.png",
+  "/assets/images/regenerated_image_1777993089103.png",
+  "/assets/images/regenerated_image_1777993250191.jpg",
+  "/assets/images/regenerated_image_1777993379890.png",
+  "/assets/images/regenerated_image_1778003364123.png",
 ];
 
 // New component for the falling cover art effect
 function FallingAssets({ active }: { active: boolean }) {
-  const [items, setItems] = useState<{ id: number; x: number; image: string; rotation: number; size: number; duration: number; delay: number; drift: number }[]>([]);
+  const [items, setItems] = useState<{ id: string | number; x: number; image: string; rotation: number; size: number; duration: number; delay: number; drift: number }[]>([]);
 
   useEffect(() => {
     if (!active) {
@@ -108,7 +108,7 @@ function FallingAssets({ active }: { active: boolean }) {
 
     const interval = setInterval(() => {
       const newItem = {
-        id: Date.now() + Math.random(),
+        id: `falling-${Date.now()}-${Math.random()}`,
         x: Math.random() * 100,
         image: TRACKS[Math.floor(Math.random() * TRACKS.length)].image,
         rotation: Math.random() * 360,
@@ -258,7 +258,7 @@ const RevealText = ({
         <motion.span
           variants={child}
           style={{ display: "inline-block", originY: "bottom" }}
-          key={index}
+          key={`reveal-${word}-${index}`}
           className={`mr-[0.2em] ${highlightIndices.includes(index) ? highlightClassName : ""}`}
         >
           {word}
@@ -470,7 +470,7 @@ export default function App() {
                 : "text-white/40 border-white/5 hover:border-white/20 bg-white/5 hover:text-white/80"
             }`}
           >
-            {isOnFire ? "[ DETONATING ]" : isFireOnCooldown ? "[ COOLING ]" : "[ LPF / FIRE ]"}
+            {isOnFire ? "Do Not Click" : isFireOnCooldown ? "Do Not Click" : "Do Not Click"}
           </motion.button>
         </div>
         

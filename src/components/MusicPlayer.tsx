@@ -5,10 +5,10 @@ import Tooltip from "./Tooltip";
 import { soundService } from "../services/soundService";
 
 export const TRACKS = [
-  { id: 1, title: "Lost Within", artist: "KILLHOUSE", album: "The Void", year: 2026, description: "A deep dive into industrial soundscapes and melancholic digital textures.", url: "https://universal-crimson-uvgprdwmzi.edgeone.dev/LOST%20WITHIN%20-%20KILLHOUSE%20MUSIC.mp3", image: "/src/assets/images/regenerated_image_1778032298158.png" },
-  { id: 2, title: "Kasoor", artist: "KILLHOUSE", album: "Sin & Redemption", year: 2025, description: "Raw emotional honesty mixed with heavy synth elements.", url: "https://eligible-coffee-8qv8qjkjzb.edgeone.dev/kasoor%20killhouse%20music.mp3", image: "/src/assets/images/regenerated_image_1777992676397.png" },
-  { id: 3, title: "Chakravyuh", artist: "KILLHOUSE", album: "The Labyrinth", year: 2026, description: "Complex rhythmic patterns building to an intense climax.", url: "https://golden-maroon-gst9h0fitx.edgeone.dev/chakravyuha%20killhouse%20music.mp3", image: "/src/assets/images/regenerated_image_1778004316605.png" },
-  { id: 4, title: "Astitva", artist: "KILLHOUSE", album: "Existence", year: 2025, description: "Pulsing drill-infused beats capturing existential reflection.", url: "https://growing-cyan-7wof7ooqa1.edgeone.dev/chaos%20astitva%20drillbeat%20.mp3", image: "/src/assets/images/regenerated_image_1778004441183.png" },
+  { id: 1, title: "Lost Within", artist: "KILLHOUSE", album: "The Void", year: 2026, description: "A deep dive into industrial soundscapes and melancholic digital textures.", url: "https://universal-crimson-uvgprdwmzi.edgeone.dev/LOST%20WITHIN%20-%20KILLHOUSE%20MUSIC.mp3", image: "https://detailed-yellow-vfmcmbhdnq.edgeone.dev/Killhouse%20-%20Lost%20Within%20(1).png" },
+  { id: 2, title: "Kasoor", artist: "KILLHOUSE", album: "Sin & Redemption", year: 2025, description: "Raw emotional honesty mixed with heavy synth elements.", url: "https://eligible-coffee-8qv8qjkjzb.edgeone.dev/kasoor%20killhouse%20music.mp3", image: "/assets/images/regenerated_image_1777992676397.png" },
+  { id: 3, title: "Chakravyuh", artist: "KILLHOUSE", album: "The Labyrinth", year: 2026, description: "Complex rhythmic patterns building to an intense climax.", url: "https://golden-maroon-gst9h0fitx.edgeone.dev/chakravyuha%20killhouse%20music.mp3", image: "/assets/images/regenerated_image_1778004316605.png" },
+  { id: 4, title: "Astitva", artist: "KILLHOUSE", album: "Existence", year: 2025, description: "Pulsing drill-infused beats capturing existential reflection.", url: "https://growing-cyan-7wof7ooqa1.edgeone.dev/chaos%20astitva%20drillbeat%20.mp3", image: "/assets/images/regenerated_image_1778004441183.png" },
 ];
 
 interface MusicPlayerProps {
@@ -114,25 +114,39 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
     };
   }, []);
 
-  // Handle CORS errors and fallback
+  // Handle CORS errors and fallback for both elements
   useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const handleError = () => {
+    const handleError = (e: Event) => {
+      const audio = e.target as HTMLAudioElement;
       if (audio.crossOrigin === "anonymous") {
-        console.warn("CORS/Media error detected. Disabling Web Audio (LPF) to ensure playback.");
+        console.warn("CORS/Media error detected. Disabling Web Audio (LPF) for this session to ensure playback.");
         setUseWebAudio(false);
-        audio.removeAttribute("crossOrigin");
-        audio.load();
-        if (isPlaying) {
-          audio.play().catch(console.error);
+        // Clean up both elements
+        if (audioRef.current) {
+          audioRef.current.removeAttribute("crossOrigin");
+          audioRef.current.load();
         }
+        if (audio2Ref.current) {
+          audio2Ref.current.removeAttribute("crossOrigin");
+          audio2Ref.current.load();
+        }
+        if (isPlaying && activeAudioRef.current) {
+          activeAudioRef.current.play().catch(console.error);
+        }
+      } else {
+        console.error("Audio Load Error:", e);
       }
     };
 
-    audio.addEventListener("error", handleError);
-    return () => audio.removeEventListener("error", handleError);
+    const a1 = audioRef.current;
+    const a2 = audio2Ref.current;
+
+    a1?.addEventListener("error", handleError);
+    a2?.addEventListener("error", handleError);
+    return () => {
+      a1?.removeEventListener("error", handleError);
+      a2?.removeEventListener("error", handleError);
+    };
   }, [isPlaying]);
 
   useEffect(() => {
@@ -343,6 +357,7 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
               <AnimatePresence>
                 {isBufferLoading && (
                   <motion.div 
+                    key="buffer-loader"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -353,6 +368,7 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
                 )}
                 {isPlaying && (
                   <motion.div
+                    key="playing-glint"
                     initial={{ opacity: 0, x: "-150%" }}
                     animate={{ 
                       opacity: [0, 0.4, 0],

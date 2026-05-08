@@ -84,7 +84,7 @@ export default function FireEffect({ active, intensity = 5 }: { active: boolean,
             <div className="flames-overlay">
               {Array.from({ length: 20 }).map((_, i) => (
                 <div
-                  key={i}
+                  key={`flame-${i}`}
                   className="flame-element"
                   style={{
                     left: `${(i / 20) * 100}%`,

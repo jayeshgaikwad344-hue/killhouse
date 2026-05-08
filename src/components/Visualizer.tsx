@@ -74,7 +74,7 @@ export default function Visualizer({ isPlaying, style = "bars", color = "white",
     <div className="flex items-center justify-center gap-[2px] h-32 w-full max-w-2xl px-4 mb-20 overflow-hidden">
       {bars.slice(0, patternComplexity * 16).map((height, i) => (
         <motion.div
-          key={i}
+          key={`bar-${i}`}
           animate={{
             height: style === "dots" ? "6px" : `${height}%`,
             opacity: isPlaying ? [0.6 * muffleFactor, 0.9 * muffleFactor, 0.6 * muffleFactor] : 0.2,

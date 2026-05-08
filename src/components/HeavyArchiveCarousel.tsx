@@ -92,18 +92,18 @@ const HeavyArchiveCarousel = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   
   const albumsData = [
-    { id: 1, title: "Deep Purple", image: "/src/assets/images/regenerated_image_1777992676397.png" },
-    { id: 2, title: "Iron Maiden", image: "/src/assets/images/regenerated_image_1777993089103.png" }, 
-    { id: 3, title: "AC/DC", image: "/src/assets/images/regenerated_image_1777993250191.jpg" },
-    { id: 4, title: "Black Sabbath", image: "/src/assets/images/regenerated_image_1777993379890.png" },
-    { id: 5, title: "Motörhead", image: "/src/assets/images/regenerated_image_1778003364123.png" },
-    { id: 6, title: "Megadeth", image: "/src/assets/images/regenerated_image_1778003709456.png" },
-    { id: 7, title: "Slayer", image: "/src/assets/images/regenerated_image_1778004316605.png" },
-    { id: 8, title: "Pantera", image: "/src/assets/images/regenerated_image_1778004441183.png" },
-    { id: 9, title: "Metallica", image: "/src/assets/images/regenerated_image_1778032201676.png" },
-    { id: 10, title: "Children of Bodom", image: "/src/assets/images/regenerated_image_1778032298158.png" },
-    { id: 11, title: "Septicflesh", image: "/src/assets/images/regenerated_image_1777992676397.png" },
-    { id: 12, title: "Led Zeppelin", image: "/src/assets/images/regenerated_image_1777993089103.png" },
+    { id: 1, title: "Deep Purple", image: "/assets/images/regenerated_image_1777992676397.png" },
+    { id: 2, title: "Iron Maiden", image: "/assets/images/regenerated_image_1777993089103.png" }, 
+    { id: 3, title: "AC/DC", image: "/assets/images/regenerated_image_1777993250191.jpg" },
+    { id: 4, title: "Black Sabbath", image: "/assets/images/regenerated_image_1777993379890.png" },
+    { id: 5, title: "Motörhead", image: "/assets/images/regenerated_image_1778003364123.png" },
+    { id: 6, title: "Megadeth", image: "/assets/images/regenerated_image_1778003709456.png" },
+    { id: 7, title: "Slayer", image: "/assets/images/regenerated_image_1778004316605.png" },
+    { id: 8, title: "Pantera", image: "/assets/images/regenerated_image_1778004441183.png" },
+    { id: 9, title: "Metallica", image: "/assets/images/regenerated_image_1778032201676.png" },
+    { id: 10, title: "Children of Bodom", image: "https://detailed-yellow-vfmcmbhdnq.edgeone.dev/Killhouse%20-%20Lost%20Within%20(1).png" },
+    { id: 11, title: "Septicflesh", image: "/assets/images/regenerated_image_1777992676397.png" },
+    { id: 12, title: "Led Zeppelin", image: "/assets/images/regenerated_image_1777993089103.png" },
   ];
 
   useEffect(() => {
