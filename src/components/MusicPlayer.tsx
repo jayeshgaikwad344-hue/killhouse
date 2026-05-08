@@ -9,7 +9,6 @@ export const TRACKS = [
   { id: 2, title: "Kasoor", artist: "KILLHOUSE", album: "Sin & Redemption", year: 2025, description: "Raw emotional honesty mixed with heavy synth elements.", url: "https://eligible-coffee-8qv8qjkjzb.edgeone.dev/kasoor%20killhouse%20music.mp3", image: "/src/assets/images/regenerated_image_1777992676397.png" },
   { id: 3, title: "Chakravyuh", artist: "KILLHOUSE", album: "The Labyrinth", year: 2026, description: "Complex rhythmic patterns building to an intense climax.", url: "https://golden-maroon-gst9h0fitx.edgeone.dev/chakravyuha%20killhouse%20music.mp3", image: "/src/assets/images/regenerated_image_1778004316605.png" },
   { id: 4, title: "Astitva", artist: "KILLHOUSE", album: "Existence", year: 2025, description: "Pulsing drill-infused beats capturing existential reflection.", url: "https://growing-cyan-7wof7ooqa1.edgeone.dev/chaos%20astitva%20drillbeat%20.mp3", image: "/src/assets/images/regenerated_image_1778004441183.png" },
-  { id: 5, title: "Heat Waves", artist: "Glass Animals", album: "Dreamland", year: 2020, description: "A mellow, atmospheric track exploring themes of nostalgia.", url: "/src/assets/audio/heat-waves.mp3", image: "/src/assets/images/regenerated_image_1777993379890.png" },
 ];
 
 interface MusicPlayerProps {
@@ -64,9 +63,9 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
       audioContextRef.current = ctx;
       filterRef.current = filter;
       
-      console.log("Audio Context & Filter Initialized for both audio elements");
+      // console.log("Audio Context & Filter Initialized for both audio elements");
     } catch (err) {
-      console.error("Failed to initialize Web Audio:", err);
+      // console.error("Failed to initialize Web Audio:", err);
       setUseWebAudio(false);
     }
   };

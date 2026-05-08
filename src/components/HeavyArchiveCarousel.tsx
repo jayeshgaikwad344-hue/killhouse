@@ -92,18 +92,18 @@ const HeavyArchiveCarousel = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   
   const albumsData = [
-    { id: 1, title: "Deep Purple", image: "https://images.unsplash.com/photo-1629273302329-073165243021?q=80&w=600&auto=format&fit=crop" },
-    { id: 2, title: "Iron Maiden", image: "https://images.unsplash.com/photo-1598387181032-a3103a2db5b3?q=80&w=600&auto=format&fit=crop" }, 
-    { id: 3, title: "AC/DC", image: "https://images.unsplash.com/photo-1574151432344-99a429996587?q=80&w=600&auto=format&fit=crop" },
-    { id: 4, title: "Black Sabbath", image: "https://images.unsplash.com/photo-1514525253344-99a429996587?q=80&w=600&auto=format&fit=crop" },
-    { id: 5, title: "Motörhead", image: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=600&auto=format&fit=crop" },
-    { id: 6, title: "Megadeth", image: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=600&auto=format&fit=crop" },
-    { id: 7, title: "Slayer", image: "https://images.unsplash.com/photo-1514525253344-99a429996587?q=80&w=600&auto=format&fit=crop" },
-    { id: 8, title: "Pantera", image: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=600&auto=format&fit=crop" },
-    { id: 9, title: "Metallica", image: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?q=80&w=600&auto=format&fit=crop" },
-    { id: 10, title: "Children of Bodom", image: "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?q=80&w=600&auto=format&fit=crop" },
-    { id: 11, title: "Septicflesh", image: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=600&auto=format&fit=crop" },
-    { id: 12, title: "Led Zeppelin", image: "https://images.unsplash.com/photo-1514525253344-99a429996587?q=80&w=600&auto=format&fit=crop" },
+    { id: 1, title: "Deep Purple", image: "/src/assets/images/regenerated_image_1777992676397.png" },
+    { id: 2, title: "Iron Maiden", image: "/src/assets/images/regenerated_image_1777993089103.png" }, 
+    { id: 3, title: "AC/DC", image: "/src/assets/images/regenerated_image_1777993250191.jpg" },
+    { id: 4, title: "Black Sabbath", image: "/src/assets/images/regenerated_image_1777993379890.png" },
+    { id: 5, title: "Motörhead", image: "/src/assets/images/regenerated_image_1778003364123.png" },
+    { id: 6, title: "Megadeth", image: "/src/assets/images/regenerated_image_1778003709456.png" },
+    { id: 7, title: "Slayer", image: "/src/assets/images/regenerated_image_1778004316605.png" },
+    { id: 8, title: "Pantera", image: "/src/assets/images/regenerated_image_1778004441183.png" },
+    { id: 9, title: "Metallica", image: "/src/assets/images/regenerated_image_1778032201676.png" },
+    { id: 10, title: "Children of Bodom", image: "/src/assets/images/regenerated_image_1778032298158.png" },
+    { id: 11, title: "Septicflesh", image: "/src/assets/images/regenerated_image_1777992676397.png" },
+    { id: 12, title: "Led Zeppelin", image: "/src/assets/images/regenerated_image_1777993089103.png" },
   ];
 
   useEffect(() => {
