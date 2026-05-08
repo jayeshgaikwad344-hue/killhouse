@@ -42,10 +42,11 @@ export default function DestructionEffect({ active, intensity = 5 }: { active: b
 
     // Dynamic glitch blocks and popups
     const interval = setInterval(() => {
+      const now = Date.now();
       if (Math.random() > 0.3) {
         setGlitchBlocks(prev => {
           const newBlock = {
-            id: Date.now(),
+            id: now + Math.random(),
             top: `${Math.random() * 100}%`,
             left: `${Math.random() * 100}%`,
             width: `${5 + Math.random() * 20}%`,
@@ -59,7 +60,7 @@ export default function DestructionEffect({ active, intensity = 5 }: { active: b
       if (Math.random() > 0.7) {
         setPopups(prev => {
           const newPopup = {
-            id: Date.now(),
+            id: now + Math.random() + 1,
             top: `${20 + Math.random() * 60}%`,
             left: `${20 + Math.random() * 60}%`,
             text: errorMessages[Math.floor(Math.random() * errorMessages.length)]

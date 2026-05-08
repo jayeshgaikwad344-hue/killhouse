@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { Play, Pause, SkipBack, SkipForward, Volume2, Music as MusicIcon } from "lucide-react";
 import { useState, useRef, useEffect, ChangeEvent } from "react";
 import Tooltip from "./Tooltip";
+import { soundService } from "../services/soundService";
 
 export const TRACKS = [
   { id: 1, title: "Lost Within", artist: "KILLHOUSE", album: "The Void", year: 2026, description: "A deep dive into industrial soundscapes and melancholic digital textures.", url: "https://universal-crimson-uvgprdwmzi.edgeone.dev/LOST%20WITHIN%20-%20KILLHOUSE%20MUSIC.mp3", image: "/src/assets/images/regenerated_image_1778032298158.png" },
@@ -138,7 +139,7 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
   useEffect(() => {
     if (!scrollProgress) return;
     
-    return scrollProgress.on("change", (latest: number) => {
+    const unsub = scrollProgress.on("change", (latest: number) => {
       // Volume mapping (existing logic)
       const targetVol = latest > 0.1 ? Math.max(0.05, 0.5 - (latest * 0.8)) : 0.5;
       if (activeAudioRef.current) {
@@ -160,6 +161,7 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
 
       setIsMuffled(latest > 0.1);
     });
+    return () => unsub();
   }, [scrollProgress, volume]);
 
   useEffect(() => {
@@ -241,14 +243,17 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
 
   const togglePlay = () => {
     initAudio();
+    soundService.play(isPlaying ? 'TOGGLE_OFF' : 'TOGGLE_ON', 0.3);
     onTogglePlay(!isPlaying);
   };
 
   const nextTrack = () => {
+    soundService.play('CLICK', 0.2);
     onTrackChange((currentTrackIndex + 1) % TRACKS.length);
   };
 
   const prevTrack = () => {
+    soundService.play('CLICK', 0.2);
     onTrackChange((currentTrackIndex - 1 + TRACKS.length) % TRACKS.length);
   };
 
@@ -418,12 +423,21 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
           {/* Controls */}
           <div className="flex items-center gap-2 sm:gap-6">
             <Tooltip text="Previous">
-              <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={prevTrack} className="p-2 opacity-40 hover:opacity-100 transition-opacity"><SkipBack size={18} /></motion.button>
+              <motion.button 
+                whileHover={{ scale: 1.1 }} 
+                whileTap={{ scale: 0.9 }} 
+                onMouseEnter={() => soundService.play('HOVER', 0.1)}
+                onClick={prevTrack} 
+                className="p-2 opacity-40 hover:opacity-100 transition-opacity"
+              >
+                <SkipBack size={18} />
+              </motion.button>
             </Tooltip>
             <Tooltip text={isPlaying ? "Pause" : "Play"}>
               <motion.button 
                 whileHover={{ scale: 1.15 }}
                 whileTap={{ scale: 0.9 }}
+                onMouseEnter={() => soundService.play('HOVER', 0.15)}
                 onClick={togglePlay}
                 className="w-14 h-14 flex items-center justify-center bg-white text-black rounded-full shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all"
               >
@@ -431,7 +445,15 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
               </motion.button>
             </Tooltip>
             <Tooltip text="Next">
-              <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} onClick={nextTrack} className="p-2 opacity-40 hover:opacity-100 transition-opacity"><SkipForward size={18} /></motion.button>
+              <motion.button 
+                whileHover={{ scale: 1.1 }} 
+                whileTap={{ scale: 0.9 }} 
+                onMouseEnter={() => soundService.play('HOVER', 0.1)}
+                onClick={nextTrack} 
+                className="p-2 opacity-40 hover:opacity-100 transition-opacity"
+              >
+                <SkipForward size={18} />
+              </motion.button>
             </Tooltip>
           </div>
 
@@ -449,6 +471,7 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
                     value={volume}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
+                    onInput={() => soundService.play('SLIDE', 0.05)}
                     onChange={(e) => setVolume(parseFloat(e.target.value))}
                     className="w-20 h-1 bg-white/20 rounded-lg appearance-none cursor-pointer accent-white"
                   />
@@ -472,6 +495,7 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
             max={duration || 0} 
             step="0.1"
             value={currentTime}
+            onInput={() => soundService.play('SLIDE', 0.03)}
             onChange={handleSeek}
             className="flex-1 h-1 bg-white/10 rounded-lg appearance-none cursor-pointer accent-white"
           />

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { Play, Pause, SkipBack, SkipForward } from "lucide-react";
 import { TRACKS } from "./MusicPlayer";
 import Tooltip from "./Tooltip";
+import { soundService } from "../services/soundService";
 
 interface MiniPlayerProps {
   currentTrackIndex: number;
@@ -21,16 +22,19 @@ export default function MiniPlayer({
 
   const togglePlay = (e: MouseEvent) => {
     e.stopPropagation();
+    soundService.play(isPlaying ? 'TOGGLE_OFF' : 'TOGGLE_ON', 0.2);
     onTogglePlay(!isPlaying);
   };
 
   const nextTrack = (e: MouseEvent) => {
     e.stopPropagation();
+    soundService.play('CLICK', 0.15);
     onTrackChange((currentTrackIndex + 1) % TRACKS.length);
   };
 
   const prevTrack = (e: MouseEvent) => {
     e.stopPropagation();
+    soundService.play('CLICK', 0.15);
     onTrackChange((currentTrackIndex - 1 + TRACKS.length) % TRACKS.length);
   };
 
@@ -43,6 +47,7 @@ export default function MiniPlayer({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             src={currentTrack.image}
+            onMouseEnter={() => soundService.play('HOVER', 0.05)}
             className="w-full h-full object-cover"
           />
         </div>
@@ -68,6 +73,7 @@ export default function MiniPlayer({
         <Tooltip text="Previous">
           <button 
             onClick={prevTrack}
+            onMouseEnter={() => soundService.play('HOVER', 0.05)}
             className="text-white/40 hover:text-white transition-colors"
           >
             <SkipBack size={14} />
@@ -76,6 +82,7 @@ export default function MiniPlayer({
         
         <button 
           onClick={togglePlay}
+          onMouseEnter={() => soundService.play('HOVER', 0.1)}
           className="w-8 h-8 flex items-center justify-center bg-white text-black rounded-full hover:scale-110 transition-transform shadow-lg"
         >
           {isPlaying ? <Pause size={14} fill="currentColor" /> : <Play size={14} fill="currentColor" className="ml-0.5" />}
@@ -84,6 +91,7 @@ export default function MiniPlayer({
         <Tooltip text="Next">
           <button 
             onClick={nextTrack}
+            onMouseEnter={() => soundService.play('HOVER', 0.05)}
             className="text-white/40 hover:text-white transition-colors"
           >
             <SkipForward size={14} />

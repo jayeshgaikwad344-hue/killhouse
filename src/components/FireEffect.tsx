@@ -16,10 +16,11 @@ export default function FireEffect({ active, intensity = 5 }: { active: boolean,
     const intervalDuration = Math.max(50, 400 - (intensity * 35));
 
     const interval = setInterval(() => {
+      const now = Date.now();
       setEmbers(prev => [
         ...prev.slice(-(5 + intensity * 5)), // More embers with higher intensity
         {
-          id: Date.now() + Math.random(),
+          id: now + Math.random(),
           left: `${Math.random() * 100}%`,
           size: Math.random() * (4 + intensity) + 3,
           duration: `${Math.random() * 2 + 2}s`,
@@ -30,7 +31,7 @@ export default function FireEffect({ active, intensity = 5 }: { active: boolean,
       setSmoke(prev => [
         ...prev.slice(-(2 + intensity)), // More smoke with higher intensity
         {
-          id: Date.now() + Math.random(),
+          id: now + Math.random() + 10,
           left: `${(Math.random() * 100)}%`,
           duration: `${Math.random() * 3 + 4}s`,
           delay: `${Math.random() * 2}s`

@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { motion, useScroll, useTransform, AnimatePresence, Variants } from "motion/react";
+import { motion, useScroll, useTransform, AnimatePresence } from "motion/react";
 import { 
   ArrowUpRight, 
   Menu, 
@@ -28,7 +28,6 @@ import MiniPlayer from "./components/MiniPlayer";
 import Visualizer, { VisualizerStyle, VisualizerColor } from "./components/Visualizer";
 import Tooltip from "./components/Tooltip";
 import HeavyArchiveCarousel from "./components/HeavyArchiveCarousel";
-import StudioGearVisualizer from "./components/StudioGearVisualizer";
 import { getVisualAdjustments, VisualAdjustments } from "./services/geminiVisualService";
 
 import CustomCursor from "./components/CustomCursor";
@@ -38,6 +37,7 @@ import HeartbeatWaves from "./components/HeartbeatWaves";
 import SmoothScroll from "./components/SmoothScroll";
 import FireEffect from "./components/FireEffect";
 import DestructionEffect from "./components/DestructionEffect";
+import { soundService } from "./services/soundService";
 
 const PROJECTS = [
   { id: 1, title: "Sonic Architecture", category: "Trap Music", year: 2026, description: "Minimalist trap beats combined with heavy, metallic industrial soundscapes, exploring harsh textures in contemporary music.", image: "https://images.unsplash.com/photo-1614728263952-84ea256f9679?auto=format&fit=crop&q=80&w=1000" },
@@ -58,7 +58,7 @@ const PRESETS = [
   { name: "Crimson Waves", style: "bars" as VisualizerStyle, color: "crimson" as VisualizerColor, adjustments: { particleSpeed: 6, colorHue: 0, patternComplexity: 5 } },
 ];
 
-const containerVariants: Variants = {
+const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -68,7 +68,7 @@ const containerVariants: Variants = {
   },
 };
 
-const itemVariants: Variants = {
+const itemVariants = {
   hidden: { opacity: 0, y: 50, scale: 0.9 },
   visible: { 
     opacity: 1, 
@@ -76,8 +76,8 @@ const itemVariants: Variants = {
     scale: 1,
     transition: {
       duration: 1.0,
-      ease: [0.22, 1, 0.36, 1] as const,
-    } as any,
+      ease: [0.22, 1, 0.36, 1] as any,
+    },
   },
 };
 
@@ -108,7 +108,7 @@ function FallingAssets({ active }: { active: boolean }) {
 
     const interval = setInterval(() => {
       const newItem = {
-        id: Math.random(),
+        id: Date.now() + Math.random(),
         x: Math.random() * 100,
         image: TRACKS[Math.floor(Math.random() * TRACKS.length)].image,
         rotation: Math.random() * 360,
@@ -176,7 +176,7 @@ function WelcomeMessage() {
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 10, filter: "blur(10px)" }}
-          transition={{ duration: 1.5, ease: [0.23, 1, 0.32, 1] }}
+          transition={{ duration: 1.5, ease: [0.23, 1, 0.32, 1] as any }}
           className="fixed bottom-40 left-1/2 -translate-x-1/2 z-[110] pointer-events-none"
         >
           <div className="glass-card px-10 py-5 rounded-full border border-white/10 bg-black/40 backdrop-blur-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex items-center gap-6 ring-1 ring-white/5">
@@ -211,7 +211,7 @@ const RevealText = ({
 }) => {
   const words = text.split(" ");
   
-  const container: Variants = {
+  const container = {
     hidden: { opacity: 0 },
     visible: (i = 1) => ({
       opacity: 1,
@@ -222,7 +222,7 @@ const RevealText = ({
     }),
   };
 
-  const child: Variants = {
+  const child = {
     visible: {
       opacity: 1,
       y: 0,
@@ -309,9 +309,10 @@ export default function App() {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0.1]);
 
   useEffect(() => {
-    return scrollY.on("change", (latest) => {
+    const unsub = scrollY.on("change", (latest) => {
       setScrolled(latest > 50);
     });
+    return () => unsub();
   }, [scrollY]);
 
   useEffect(() => {
@@ -337,6 +338,7 @@ export default function App() {
   }, [isOnFire]);
 
   const handleFireToggle = () => {
+    soundService.play(isOnFire ? 'TOGGLE_OFF' : 'TOGGLE_ON', 0.4);
     if (isOnFire) {
       setIsOnFire(false);
       setIsDestructing(false);
@@ -358,19 +360,14 @@ export default function App() {
   }, [fireIntensity, isOnFire]);
 
   useEffect(() => {
-    return scrollYProgress.on("change", (latest) => {
+    const unsub = scrollYProgress.on("change", (latest) => {
       if (fireAudioRef.current && isOnFire) {
         // Muffle fire audio too if scrolling deep
         fireAudioRef.current.volume = latest > 0.1 ? Math.max(0.1, 1 - (latest * 2)) : 1;
       }
     });
+    return () => unsub();
   }, [scrollYProgress, isOnFire]);
-
-  useEffect(() => {
-    return scrollY.on("change", (latest) => {
-      setScrolled(latest > 50);
-    });
-  }, [scrollY]);
 
   return (
     <div ref={containerRef} className="relative min-h-screen bg-black text-[#d1d1d1] font-sans overflow-x-hidden">
@@ -398,7 +395,10 @@ export default function App() {
             className="fixed inset-0 z-[60] bg-black/95 backdrop-blur-3xl flex flex-col justify-center items-center p-6"
           >
             <button 
-              onClick={() => setIsMenuOpen(false)}
+              onClick={() => {
+                soundService.play('CLICK', 0.2);
+                setIsMenuOpen(false);
+              }}
               className="absolute top-8 right-8 text-white flex items-center gap-2 uppercase tracking-[0.3em] font-bold text-[10px] opacity-60 hover:opacity-100 transition-opacity"
             >
               Close <X size={20} />
@@ -412,7 +412,11 @@ export default function App() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 }}
                   href={`#${item.toLowerCase()}`}
-                  onClick={() => setIsMenuOpen(false)}
+                  onMouseEnter={() => soundService.play('HOVER', 0.15)}
+                  onClick={() => {
+                    soundService.play('CLICK', 0.2);
+                    setIsMenuOpen(false);
+                  }}
                   className="text-6xl sm:text-8xl font-display font-light hover:text-white transition-colors tracking-tighter"
                 >
                   {item}
@@ -432,6 +436,8 @@ export default function App() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             whileHover={{ letterSpacing: "0.2em" }}
+            onMouseEnter={() => soundService.play('HOVER', 0.1)}
+            onClick={() => soundService.play('CLICK', 0.2)}
             className="text-lg font-sans font-black uppercase text-red-600 tracking-tighter transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]"
           >
             KILLHOUSE MUSIC
@@ -445,6 +451,7 @@ export default function App() {
               min="1" 
               max="10" 
               value={fireIntensity} 
+              onInput={() => soundService.play('SLIDE', 0.05)}
               onChange={(e) => setFireIntensity(Number(e.target.value))} 
               className="w-20 h-1 bg-white/20 accent-orange-500 rounded-lg appearance-none cursor-pointer"
               title="Spark Intensity"
@@ -469,14 +476,27 @@ export default function App() {
         
         <div className="flex-1 flex justify-end gap-12 items-center">
           <div className="hidden lg:flex gap-8 text-[10px] uppercase tracking-[0.2em] font-semibold opacity-60">
-            <a href="#work" className="hover:opacity-100 transition-opacity">Work</a>
-            <a href="#sounds" className="hover:opacity-100 transition-opacity">Sounds</a>
-            <a href="#contact" className="hover:opacity-100 transition-opacity">Contact</a>
+            <a href="#work" 
+               onMouseEnter={() => soundService.play('HOVER', 0.1)}
+               onClick={() => soundService.play('CLICK', 0.2)}
+               className="hover:opacity-100 transition-opacity">Work</a>
+            <a href="#sounds" 
+               onMouseEnter={() => soundService.play('HOVER', 0.1)}
+               onClick={() => soundService.play('CLICK', 0.2)}
+               className="hover:opacity-100 transition-opacity">Sounds</a>
+            <a href="#contact" 
+               onMouseEnter={() => soundService.play('HOVER', 0.1)}
+               onClick={() => soundService.play('CLICK', 0.2)}
+               className="hover:opacity-100 transition-opacity">Contact</a>
           </div>
           <motion.button 
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            onMouseEnter={() => soundService.play('HOVER', 0.1)}
+            onClick={() => {
+              soundService.play('CLICK', 0.2);
+              setIsMenuOpen(!isMenuOpen);
+            }}
             className="flex items-center gap-3 text-[10px] font-bold uppercase tracking-[0.2em] opacity-80 hover:opacity-100 transition-opacity"
           >
             <Menu size={18} />
@@ -570,7 +590,9 @@ export default function App() {
                 key={project.id}
                 variants={itemVariants}
                 className="group relative cursor-pointer"
+                onMouseEnter={() => soundService.play('HOVER', 0.05)}
                 onClick={() => {
+                  soundService.play('CLICK', 0.2);
                   const trackIndex = i % TRACKS.length;
                   if (currentTrackIndex === trackIndex) {
                     setIsPlaying(!isPlaying);
@@ -588,7 +610,7 @@ export default function App() {
                   <div className="relative aspect-[4/5] overflow-hidden rounded-lg mb-6 ring-1 ring-white/5">
                     <motion.img 
                       whileHover={{ scale: 1.05 }}
-                      transition={{ duration: 1.5, ease: [0.33, 1, 0.68, 1] }}
+                      transition={{ duration: 1.5, ease: [0.33, 1, 0.68, 1] as any }}
                       src={project.image} 
                       alt={project.title}
                       className={`w-full h-full object-cover transition-all duration-1000 ${
@@ -643,7 +665,7 @@ export default function App() {
           initial={{ opacity: 0, y: 100 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 1.2, ease: [0.33, 1, 0.68, 1] }}
+          transition={{ duration: 1.2, ease: [0.33, 1, 0.68, 1] as any }}
           className="relative z-10 max-w-6xl mx-auto"
         >
           <div className="mb-20 text-center">
@@ -807,24 +829,6 @@ export default function App() {
 
       <HeavyArchiveCarousel />
 
-      {/* Showroom Section */}
-      <section className="py-32 px-4 sm:px-8 lg:px-12 relative z-10">
-        <div className="max-w-[1800px] mx-auto">
-          <div className="mb-20 px-4">
-            <RevealText 
-              text="03 / Hardware" 
-              className="text-white text-[10px] uppercase tracking-[0.4em] font-bold mb-4 opacity-40 text-left justify-start"
-            />
-            <RevealText 
-              text="EQUIPMENT SHOWROOM" 
-              className="text-5xl sm:text-7xl font-display font-light tracking-tighter text-white text-left justify-start uppercase"
-              delay={0.1}
-            />
-          </div>
-          <StudioGearVisualizer />
-        </div>
-      </section>
-
       {/* Footer */}
       <footer id="contact" className="py-32 px-8 sm:px-16 lg:px-32 border-t border-white/5 relative z-10 overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-32 mb-48">
@@ -832,7 +836,7 @@ export default function App() {
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 1.2, ease: [0.33, 1, 0.68, 1] }}
+            transition={{ duration: 1.2, ease: [0.33, 1, 0.68, 1] as any }}
           >
             <div className="mb-12">
               <RevealText 
@@ -857,7 +861,7 @@ export default function App() {
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 1.2, ease: [0.33, 1, 0.68, 1] }}
+            transition={{ duration: 1.2, ease: [0.33, 1, 0.68, 1] as any }}
             className="grid grid-cols-2 gap-16"
           >
             <div>

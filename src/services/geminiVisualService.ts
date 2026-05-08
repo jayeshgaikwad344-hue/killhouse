@@ -1,6 +1,13 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+let aiInstance: any = null;
+
+function getAi() {
+    if (!aiInstance) {
+        aiInstance = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
+    }
+    return aiInstance;
+}
 
 export interface VisualAdjustments {
     particleSpeed: number;
@@ -14,6 +21,7 @@ export async function getVisualAdjustments(audioMood: string, energyLevel: numbe
     Return a JSON object with particleSpeed (float 0-10), colorHue (int 0-360), and patternComplexity (int 1-5).`;
 
     try {
+        const ai = getAi();
         const response = await ai.models.generateContent({
             model: "gemini-3-flash-preview",
             contents: prompt,

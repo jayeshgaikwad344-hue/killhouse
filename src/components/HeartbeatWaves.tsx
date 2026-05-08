@@ -15,8 +15,8 @@ export default function HeartbeatWaves() {
     let time = 0;
 
     const setCanvasSize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+      canvas.width = window.innerWidth || 1000;
+      canvas.height = window.innerHeight || 1000;
     };
 
     const handleMouseMove = (e: MouseEvent) => {
