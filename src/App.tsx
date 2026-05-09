@@ -434,7 +434,7 @@ export default function App() {
       <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 transition-timing-[cubic-bezier(0.23,1,0.32,1)] ${
         scrolled ? "py-4 px-8 bg-black/40 backdrop-blur-3xl border-b border-white/5" : "py-10 px-8"
       } flex items-center`}>
-        <div className="flex-1 flex justify-start">
+        <div className="flex-1 flex justify-start items-center gap-3">
           <motion.a 
             href="#home"
             initial={{ opacity: 0, x: -20 }}
@@ -442,9 +442,14 @@ export default function App() {
             whileHover={{ letterSpacing: "0.2em" }}
             onMouseEnter={() => soundService.play('HOVER', 0.1)}
             onClick={() => soundService.play('CLICK', 0.2)}
-            className="text-lg font-sans font-black uppercase text-red-600 tracking-tighter transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]"
+            className="flex items-center gap-2 text-lg font-sans font-black uppercase text-red-600 tracking-tighter transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)]"
           >
-            KILLHOUSE MUSIC
+            <img 
+              src="https://detailed-yellow-vfmcmbhdnq.edgeone.dev/Killhouse%20-%20Lost%20Within%20(1).png" 
+              alt="KILLHOUSE logo" 
+              className="w-10 h-10 object-contain invert grayscale"
+            />
+            <span>KILLHOUSE MUSIC</span>
           </motion.a>
         </div>
 
