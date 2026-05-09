@@ -286,6 +286,10 @@ export default function App() {
   const [isDestructing, setIsDestructing] = useState(false);
   const [isFireOnCooldown, setIsFireOnCooldown] = useState(false);
   const [fireIntensity, setFireIntensity] = useState(5);
+  useEffect(() => {
+    document.title = "KILLHOUSE MUSIC";
+  }, []);
+
   const [scrolled, setScrolled] = useState(false);
   const fireAudioRef = useRef<HTMLAudioElement | null>(null);
   const containerRef = useRef(null);
