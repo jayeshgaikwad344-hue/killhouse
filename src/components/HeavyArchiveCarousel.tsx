@@ -92,18 +92,18 @@ const HeavyArchiveCarousel = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   
   const albumsData = [
-    { id: 1, title: "Deep Purple", image: "/assets/images/regenerated_image_1777992676397.png" },
-    { id: 2, title: "Iron Maiden", image: "/assets/images/regenerated_image_1777993089103.png" }, 
-    { id: 3, title: "AC/DC", image: "/assets/images/regenerated_image_1777993250191.jpg" },
-    { id: 4, title: "Black Sabbath", image: "/assets/images/regenerated_image_1777993379890.png" },
-    { id: 5, title: "Motörhead", image: "/assets/images/regenerated_image_1778003364123.png" },
-    { id: 6, title: "Megadeth", image: "/assets/images/regenerated_image_1778003709456.png" },
-    { id: 7, title: "Slayer", image: "/assets/images/regenerated_image_1778004316605.png" },
-    { id: 8, title: "Pantera", image: "/assets/images/regenerated_image_1778004441183.png" },
-    { id: 9, title: "Metallica", image: "/assets/images/regenerated_image_1778032201676.png" },
+    { id: 1, title: "Deep Purple", image: "https://elated-bronze-x8zkclgmjj.edgeone.dev/Killhouse%20-%20Kasoor.png" },
+    { id: 2, title: "Iron Maiden", image: "https://concrete-copper-aqe9zmq49p.edgeone.dev/Chapter%201.png" }, 
+    { id: 3, title: "AC/DC", image: "https://excited-chocolate-bkoyi0fko5.edgeone.dev/Chapter%203%20(1).png" },
+    { id: 4, title: "Black Sabbath", image: "https://sick-emerald-tbxbsseams.edgeone.dev/Chapter%204%20(1).png" },
+    { id: 5, title: "Motörhead", image: "https://systematic-blue-kf0j1b4fce.edgeone.dev/Chapter%205%20(1).png" },
+    { id: 6, title: "Megadeth", image: "https://comprehensive-maroon-hfyy4ixdht.edgeone.dev/IMG_20260413_001258.png" },
+    { id: 7, title: "Slayer", image: "https://excited-chocolate-bkoyi0fko5.edgeone.dev/Chapter%203%20(1).png" },
+    { id: 8, title: "Pantera", image: "https://sick-emerald-tbxbsseams.edgeone.dev/Chapter%204%20(1).png" },
+    { id: 9, title: "Metallica", image: "https://comprehensive-maroon-hfyy4ixdht.edgeone.dev/IMG_20260413_001258.png" },
     { id: 10, title: "Children of Bodom", image: "https://detailed-yellow-vfmcmbhdnq.edgeone.dev/Killhouse%20-%20Lost%20Within%20(1).png" },
-    { id: 11, title: "Septicflesh", image: "/assets/images/regenerated_image_1777992676397.png" },
-    { id: 12, title: "Led Zeppelin", image: "/assets/images/regenerated_image_1777993089103.png" },
+    { id: 11, title: "Septicflesh", image: "https://elated-bronze-x8zkclgmjj.edgeone.dev/Killhouse%20-%20Kasoor.png" },
+    { id: 12, title: "Led Zeppelin", image: "https://concrete-copper-aqe9zmq49p.edgeone.dev/Chapter%201.png" },
   ];
 
   useEffect(() => {

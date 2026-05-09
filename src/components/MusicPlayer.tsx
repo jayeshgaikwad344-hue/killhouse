@@ -6,9 +6,9 @@ import { soundService } from "../services/soundService";
 
 export const TRACKS = [
   { id: 1, title: "Lost Within", artist: "KILLHOUSE", album: "The Void", year: 2026, description: "A deep dive into industrial soundscapes and melancholic digital textures.", url: "https://universal-crimson-uvgprdwmzi.edgeone.dev/LOST%20WITHIN%20-%20KILLHOUSE%20MUSIC.mp3", image: "https://detailed-yellow-vfmcmbhdnq.edgeone.dev/Killhouse%20-%20Lost%20Within%20(1).png" },
-  { id: 2, title: "Kasoor", artist: "KILLHOUSE", album: "Sin & Redemption", year: 2025, description: "Raw emotional honesty mixed with heavy synth elements.", url: "https://eligible-coffee-8qv8qjkjzb.edgeone.dev/kasoor%20killhouse%20music.mp3", image: "/assets/images/regenerated_image_1777992676397.png" },
-  { id: 3, title: "Chakravyuh", artist: "KILLHOUSE", album: "The Labyrinth", year: 2026, description: "Complex rhythmic patterns building to an intense climax.", url: "https://golden-maroon-gst9h0fitx.edgeone.dev/chakravyuha%20killhouse%20music.mp3", image: "/assets/images/regenerated_image_1778004316605.png" },
-  { id: 4, title: "Astitva", artist: "KILLHOUSE", album: "Existence", year: 2025, description: "Pulsing drill-infused beats capturing existential reflection.", url: "https://growing-cyan-7wof7ooqa1.edgeone.dev/chaos%20astitva%20drillbeat%20.mp3", image: "/assets/images/regenerated_image_1778004441183.png" },
+  { id: 2, title: "Kasoor", artist: "KILLHOUSE", album: "Sin & Redemption", year: 2025, description: "Raw emotional honesty mixed with heavy synth elements.", url: "https://eligible-coffee-8qv8qjkjzb.edgeone.dev/kasoor%20killhouse%20music.mp3", image: "https://elated-bronze-x8zkclgmjj.edgeone.dev/Killhouse%20-%20Kasoor.png" },
+  { id: 3, title: "Chakravyuh", artist: "KILLHOUSE", album: "The Labyrinth", year: 2026, description: "Complex rhythmic patterns building to an intense climax.", url: "https://golden-maroon-gst9h0fitx.edgeone.dev/chakravyuha%20killhouse%20music.mp3", image: "https://concrete-copper-aqe9zmq49p.edgeone.dev/Chapter%201.png" },
+  { id: 4, title: "Astitva", artist: "KILLHOUSE", album: "Existence", year: 2025, description: "Pulsing drill-infused beats capturing existential reflection.", url: "https://growing-cyan-7wof7ooqa1.edgeone.dev/chaos%20astitva%20drillbeat%20.mp3", image: "https://comprehensive-maroon-hfyy4ixdht.edgeone.dev/IMG_20260413_001258.png" },
 ];
 
 interface MusicPlayerProps {
