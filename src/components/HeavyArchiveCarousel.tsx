@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'motion/react';
+import { motion, useAnimationFrame, useMotionValue, useSpring } from 'motion/react';
 import { Play } from 'lucide-react';
 import { cn } from '../lib/utils';
 
@@ -8,28 +8,45 @@ const AlbumArtCard = ({ title, image, index, total, radius }: any) => {
   
   return (
     <div
-      className="absolute w-16 h-16 sm:w-24 sm:h-24 md:w-32 md:h-32 cursor-pointer group"
+      className="absolute w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-40 lg:h-40 cursor-pointer group"
       style={{
         transform: `rotateY(${angle}deg) translateZ(${radius}px)`,
         transformStyle: "preserve-3d",
         backfaceVisibility: "hidden",
+        willChange: "transform"
       }}
     >
       <div className="w-full h-full relative group-hover:scale-110 transition-transform duration-500 shadow-2xl">
+        {/* Physical Sleeve Effect */}
+        <div className="absolute inset-0 z-20 pointer-events-none bg-gradient-to-tr from-white/10 via-transparent to-white/10 opacity-30 rounded-xl" />
         <img 
           src={image} 
           alt={title} 
-          className="w-full h-full object-cover rounded-xl border border-white/10 transition-all duration-700" 
+          className="w-full h-full object-cover rounded-xl border border-white/10 transition-all duration-700 shadow-[0_0_30px_rgba(0,0,0,0.5)]" 
+          loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4 rounded-xl">
-          <p className="text-[10px] font-mono text-white/40 uppercase tracking-widest mb-1">Heavy Metal</p>
-          <h4 className="text-white font-display font-black uppercase text-xs sm:text-sm md:text-base leading-tight">{title}</h4>
+        
+        {/* Persistent Title Overlay - Bottom Bar */}
+        <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 bg-gradient-to-t from-black/90 via-black/40 to-transparent rounded-b-xl z-30">
+          <p className="text-[7px] sm:text-[9px] font-mono text-red-500/80 uppercase tracking-[0.2em] mb-0.5 font-bold">KILLHOUSE</p>
+          <h4 className="text-white font-display font-black uppercase text-[9px] sm:text-[11px] md:text-[13px] leading-tight tracking-tight truncate">{title}</h4>
         </div>
       </div>
       
-      {/* Reflection effect */}
+      {/* Label on the "floor" plane for extra atmosphere like the reference */}
       <div 
-        className="absolute w-full h-full top-full left-0 opacity-20 pointer-events-none scale-y-[-1] blur-sm"
+        className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap opacity-20 group-hover:opacity-60 transition-opacity hidden sm:block"
+        style={{
+          transform: "rotateX(90deg) translateZ(0)",
+          transformStyle: "preserve-3d"
+        }}
+      >
+        <span className="text-[8px] sm:text-[10px] font-mono font-black text-white uppercase tracking-[0.4em]">{title}</span>
+      </div>
+      
+      {/* Reflection effect - Hidden on mobile for performance */}
+      <div 
+        className="absolute w-full h-1/2 top-[102%] left-0 opacity-10 pointer-events-none scale-y-[-1] blur-md overflow-hidden hidden md:block"
         style={{
           maskImage: "linear-gradient(to bottom, rgba(0,0,0,0.4), transparent)",
           WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,0.4), transparent)"
@@ -39,6 +56,7 @@ const AlbumArtCard = ({ title, image, index, total, radius }: any) => {
           src={image} 
           alt="" 
           className="w-full h-full object-cover rounded-xl" 
+          loading="lazy"
         />
       </div>
     </div>
@@ -62,12 +80,12 @@ export const TrackCard = ({ title, genre, duration, color, image }: any) => {
 
   return (
     <motion.div
-      whileHover={{ y: -10, scale: 1.02 }}
-      className="bg-zinc-900/40 backdrop-blur-md rounded-3xl p-6 cursor-pointer border border-white/5 hover:border-white/10 transition-all duration-500 group"
+      whileHover={{ y: -5, scale: 1.01 }}
+      className="bg-zinc-900/40 rounded-3xl p-6 cursor-pointer border border-white/5 hover:border-white/10 transition-all duration-500 group"
     >
       <div className="flex items-center justify-between mb-8">
         <div className={cn("w-24 h-24 bg-black/40 rounded-2xl overflow-hidden border", borderColors[color] || "border-white/10")}>
-          <img src={image} alt={title} className="w-full h-full object-cover transition-all duration-700" />
+          <img src={image} alt={title} className="w-full h-full object-cover transition-all duration-700" loading="lazy" />
         </div>
         <span className="text-[10px] font-mono text-white/20 uppercase tracking-[0.2em]">{duration}</span>
       </div>
@@ -86,74 +104,118 @@ export const TrackCard = ({ title, genre, duration, color, image }: any) => {
   );
 };
 
-const HeavyArchiveCarousel = () => {
-  const [rotation, setRotation] = useState(0);
+const HeavyArchiveCarousel = ({ 
+  currentTrackIndex, 
+  isPlaying, 
+  onTrackChange, 
+  onTogglePlay 
+}: any) => {
+  const rotationValue = useMotionValue(0);
   const [radius, setRadius] = useState(550);
   const containerRef = useRef<HTMLDivElement>(null);
   
   const albumsData = [
-    { id: 1, title: "Deep Purple", image: "https://elated-bronze-x8zkclgmjj.edgeone.dev/Killhouse%20-%20Kasoor.png" },
-    { id: 2, title: "Iron Maiden", image: "https://concrete-copper-aqe9zmq49p.edgeone.dev/Chapter%201.png" }, 
-    { id: 3, title: "AC/DC", image: "https://excited-chocolate-bkoyi0fko5.edgeone.dev/Chapter%203%20(1).png" },
-    { id: 4, title: "Black Sabbath", image: "https://sick-emerald-tbxbsseams.edgeone.dev/Chapter%204%20(1).png" },
-    { id: 5, title: "Motörhead", image: "https://systematic-blue-kf0j1b4fce.edgeone.dev/Chapter%205%20(1).png" },
-    { id: 6, title: "Megadeth", image: "https://comprehensive-maroon-hfyy4ixdht.edgeone.dev/IMG_20260413_001258.png" },
-    { id: 7, title: "Slayer", image: "https://excited-chocolate-bkoyi0fko5.edgeone.dev/Chapter%203%20(1).png" },
-    { id: 8, title: "Pantera", image: "https://sick-emerald-tbxbsseams.edgeone.dev/Chapter%204%20(1).png" },
-    { id: 9, title: "Metallica", image: "https://comprehensive-maroon-hfyy4ixdht.edgeone.dev/IMG_20260413_001258.png" },
-    { id: 10, title: "Children of Bodom", image: "https://detailed-yellow-vfmcmbhdnq.edgeone.dev/Killhouse%20-%20Lost%20Within%20(1).png" },
-    { id: 11, title: "Septicflesh", image: "https://elated-bronze-x8zkclgmjj.edgeone.dev/Killhouse%20-%20Kasoor.png" },
-    { id: 12, title: "Led Zeppelin", image: "https://concrete-copper-aqe9zmq49p.edgeone.dev/Chapter%201.png" },
+    { id: 1, title: "Chakravyuh", image: "https://concrete-copper-aqe9zmq49p.edgeone.dev/Chapter%201.png" },
+    { id: 2, title: "ASTITVA", image: "https://sore-lavender-i0dgwjj1le.edgeone.dev/Chapter%202.png" }, 
+    { id: 3, title: "Aghata", image: "https://excited-chocolate-bkoyi0fko5.edgeone.dev/Chapter%203%20(1).png" },
+    { id: 4, title: "Pran", image: "https://sick-emerald-tbxbsseams.edgeone.dev/Chapter%204%20(1).png" },
+    { id: 5, title: "Karm", image: "https://systematic-blue-kf0j1b4fce.edgeone.dev/Chapter%205%20(1).png" },
+    { id: 6, title: "Aarzoo", image: "https://tart-plum-cvaigpma8j.edgeone.dev/AARZOO%20(1)%20(1).png" },
+    { id: 7, title: "Kasoor", image: "https://elated-bronze-x8zkclgmjj.edgeone.dev/Killhouse%20-%20Kasoor.png" },
+    { id: 8, title: "Lost Within", image: "https://detailed-yellow-vfmcmbhdnq.edgeone.dev/Killhouse%20-%20Lost%20Within%20(1).png" },
+    { id: 9, title: "Noor", image: "https://civilian-coffee-1avghlfesy.edgeone.dev/WhatsApp%20Image%202026-05-16%20at%2012.03.18%20PM.jpeg" },
+    { id: 10, title: "Pal Pal x Haseen x Ishq", image: "https://reasonable-turquoise-byemxoiogy.edgeone.dev/ChatGPT%20Image%20May%2016,%202026,%2006_51_53%20PM.png" },
   ];
 
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
-      // Fluid radius calculation - reduced by 40%
-      const calculatedRadius = Math.min(Math.max(width * 0.27, 180), 420);
+      let calculatedRadius;
+      
+      if (width < 640) {
+        calculatedRadius = 180; // Mobile POV - ultra tight
+      } else if (width < 1024) {
+        calculatedRadius = 300; // Tablet POV - balanced
+      } else {
+        calculatedRadius = 380; // PC POV - compact
+      }
+      
       setRadius(calculatedRadius);
     };
 
     window.addEventListener('resize', handleResize);
     handleResize();
 
-    let frameId: number;
-    const animate = () => {
-      setRotation(prev => prev + 0.15);
-      frameId = requestAnimationFrame(animate);
-    };
-    frameId = requestAnimationFrame(animate);
-
     return () => {
-      cancelAnimationFrame(frameId);
       window.removeEventListener('resize', handleResize);
     };
   }, []);
 
+  useAnimationFrame((time, delta) => {
+    // Delta is in ms, we want constant rotation over time
+    const move = (delta / 1000) * 10; // 10 degrees per second
+    rotationValue.set(rotationValue.get() + move);
+    if (containerRef.current) {
+        // Optimized transform update
+        containerRef.current.style.transform = `rotateX(-35deg) rotateY(${rotationValue.get()}deg) translateZ(0)`;
+    }
+  });
+
   return (
-    <section className="py-24 md:py-64 bg-black border-y border-white/5 overflow-hidden relative">
+    <section 
+      style={{ contentVisibility: 'auto' } as React.CSSProperties}
+      className="pb-24 md:pb-48 pt-12 bg-black border-y border-white/5 overflow-hidden relative"
+    >
       <div className="max-w-7xl mx-auto px-6 relative z-10 flex flex-col items-center justify-center">
         
-        <div className="relative h-[600px] sm:h-[700px] md:h-[900px] w-full flex justify-center items-center perspective-[2500px] md:perspective-[3500px]">
-          {/* Centered Content */}
-          <div className="absolute z-20 text-center space-y-4 max-w-xl px-4 pointer-events-none">
-            <h2 className="text-lg sm:text-2xl md:text-5xl font-display font-black uppercase tracking-tighter text-white">
-              The Heavy Archive
-            </h2>
-            <h3 className="text-sm sm:text-base md:text-lg font-display font-bold text-white/90 tracking-tight">
-              Riffs, Rage, and Raw Emotion
-            </h3>
-            <p className="text-white/40 text-[7px] sm:text-[9px] md:text-[10px] leading-relaxed font-sans max-w-md mx-auto italic">
-              Discover some of my favourite Hard Rock and Heavy Metal bands, the sounds that shaped my taste, my mood, and a big part of who I am.
-            </p>
+        <div className="relative h-[500px] sm:h-[600px] md:h-[700px] lg:h-[800px] w-full flex justify-center items-center perspective-[1200px] sm:perspective-[2000px] md:perspective-[2500px] lg:perspective-[3200px]">
+          {/* Centered Content - Replicating "THE HEAVY ARCHIVE" style from image */}
+          <div className="absolute z-20 text-center space-y-4 max-w-2xl px-4 pointer-events-none -translate-y-8 sm:-translate-y-16">
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              className="text-3xl sm:text-5xl md:text-7xl font-display font-black uppercase tracking-tighter text-white drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] shadow-white/10"
+            >
+              Killhouse Music
+            </motion.h2>
+            <motion.h3 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="text-xs sm:text-base md:text-xl font-display font-bold text-red-600/90 tracking-[0.2em] uppercase"
+            >
+              Explore More
+            </motion.h3>
+            <motion.p 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 0.4 }}
+              transition={{ delay: 0.4 }}
+              className="text-[8px] sm:text-[10px] md:text-xs font-sans text-white/60 max-w-md mx-auto leading-relaxed"
+            >
+              Pulsing drill-infused beats capturing existential reflection, exploring the raw essence of sound in a modern urban landscape.
+            </motion.p>
+            
+            <div className="pt-6">
+              <motion.a 
+                href="https://www.youtube.com/@killhousemusic"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.05, backgroundColor: '#fff', color: '#000' }}
+                whileTap={{ scale: 0.95 }}
+                className="inline-block px-10 py-3 border border-white/20 text-white text-[9px] uppercase tracking-[0.4em] font-black rounded-sm hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-all pointer-events-auto backdrop-blur-sm"
+              >
+                Click Here
+              </motion.a>
+            </div>
           </div>
 
           <div 
             ref={containerRef}
-            className="relative w-full flex justify-center items-center transition-transform duration-100 ease-linear"
+            className="relative w-full flex justify-center items-center"
             style={{ 
               transformStyle: "preserve-3d",
-              transform: `rotateX(-40deg) rotateY(${rotation}deg)` 
+              willChange: "transform",
+              transform: `rotateX(-40deg) rotateY(0deg)` 
             }}
           >
             {albumsData.map((album, i) => (
@@ -170,8 +232,28 @@ const HeavyArchiveCarousel = () => {
         </div>
       </div>
       
+      {/* Perspective Floor Grid */}
+      <div 
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[200%] h-[100%] pointer-events-none opacity-[0.03]"
+        style={{
+          perspective: "1000px",
+          transformStyle: "preserve-3d"
+        }}
+      >
+        <div 
+          className="w-full h-full"
+          style={{
+            backgroundImage: "linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)",
+            backgroundSize: "60px 60px",
+            transform: "rotateX(75deg) translateY(20%)",
+            maskImage: "radial-gradient(ellipse at center, black, transparent 80%)",
+            WebkitMaskImage: "radial-gradient(ellipse at center, black, transparent 80%)"
+          }}
+        />
+      </div>
+
       {/* Background Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] md:w-[1000px] h-[600px] md:h-[1000px] bg-red-600/5 blur-[120px] md:blur-[180px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] md:w-[1000px] h-[600px] md:h-[1000px] bg-red-600/5 blur-[80px] md:blur-[120px] rounded-full pointer-events-none" />
     </section>
   );
 };

@@ -1,5 +1,4 @@
-import { motion } from "motion/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 
 export type VisualizerStyle = "bars" | "dots" | "wave";
 export type VisualizerColor = "white" | "neon-blue" | "electric-purple" | "cyber-green" | "crimson" | "gold";
@@ -14,88 +13,142 @@ interface VisualizerProps {
   patternComplexity?: number;
 }
 
-const COLORS: Record<VisualizerColor, string> = {
-  white: "bg-white",
-  "neon-blue": "bg-gradient-to-t from-blue-600 to-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.5)]",
-  "electric-purple": "bg-gradient-to-t from-purple-600 to-pink-500 shadow-[0_0_15px_rgba(236,72,153,0.5)]",
-  "cyber-green": "bg-gradient-to-t from-green-600 to-emerald-400 shadow-[0_0_15px_rgba(52,211,153,0.5)]",
-  crimson: "bg-gradient-to-t from-red-600 to-orange-500 shadow-[0_0_15px_rgba(248,113,113,0.5)]",
-  gold: "bg-gradient-to-t from-amber-600 to-yellow-300 shadow-[0_0_15px_rgba(251,191,36,0.5)]",
+const COLOR_CONFIG: Record<VisualizerColor, { color: string, glow: string }> = {
+  white: { color: "#ffffff", glow: "rgba(255, 255, 255, 0.4)" },
+  "neon-blue": { color: "#22d3ee", glow: "rgba(34, 211, 238, 0.5)" },
+  "electric-purple": { color: "#ec4899", glow: "rgba(236, 72, 153, 0.5)" },
+  "cyber-green": { color: "#34d399", glow: "rgba(52, 211, 153, 0.5)" },
+  crimson: { color: "#f87171", glow: "rgba(248, 113, 113, 0.5)" },
+  gold: { color: "#fbbf24", glow: "rgba(251, 191, 36, 0.5)" },
 };
 
-export default function Visualizer({ isPlaying, style = "bars", color = "white", scrollProgress, particleSpeed = 1, colorHue = 0, patternComplexity = 3 }: VisualizerProps) {
-  const [bars, setBars] = useState(Array.from({ length: 64 }, () => 20));
-  const [muffleFactor, setMuffleFactor] = useState(1);
+export default function Visualizer({ 
+  isPlaying, 
+  style = "bars", 
+  color = "white", 
+  scrollProgress, 
+  particleSpeed = 1, 
+  colorHue = 0, 
+  patternComplexity = 3 
+}: VisualizerProps) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const muffleFactorRef = useRef(1);
 
   useEffect(() => {
     if (!scrollProgress) return;
-    return scrollProgress.on("change", (latest: number) => {
-      setMuffleFactor(latest > 0.1 ? Math.max(0.1, 1 - (latest * 1.5)) : 1);
+    const unsubscribe = scrollProgress.on("change", (latest: number) => {
+      muffleFactorRef.current = latest > 0.1 ? Math.max(0.1, 1 - (latest * 1.5)) : 1;
     });
+    return () => unsubscribe();
   }, [scrollProgress]);
 
   useEffect(() => {
-    if (!isPlaying) {
-      setBars(Array.from({ length: 64 }, () => 15));
-      return;
-    }
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
-    let lastTime = 0;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const barCount = 128;
+    let heights = Array.from({ length: barCount }, () => 2);
+    let transientValues = Array.from({ length: barCount }, () => 0);
+    let lastBeatTime = 0;
     let rafId: number;
 
-    const update = (time: number) => {
+    const draw = (time: number) => {
+      const { width, height: canvasHeight } = canvas;
+      ctx.clearRect(0, 0, width, canvasHeight);
+
+      const config = COLOR_CONFIG[color];
       const isWave = style === "wave";
+      const isDots = style === "dots";
       const speedFactor = Math.max(0.5, Math.min(2, particleSpeed));
-      if (time - lastTime > (isWave ? (50 / speedFactor) : (100 / speedFactor))) {
-        setBars(prev => prev.map((_, i) => {
-          if (isWave) {
-             const freq = 0.05;
-             const amplitude = 40 * muffleFactor;
-             const offset = time * 0.005 * speedFactor;
-             return 40 + Math.sin(i * freq + offset) * amplitude;
-          }
-          const base = 20 * muffleFactor;
-          const random = isPlaying ? Math.random() * 80 * muffleFactor : 0;
-          return base + random;
-        }));
-        lastTime = time;
+      const muffle = muffleFactorRef.current;
+
+      const beatInterval = 468; 
+      const isBeatHit = isPlaying && (time - lastBeatTime > beatInterval);
+      if (isBeatHit) {
+        lastBeatTime = time;
       }
-      rafId = requestAnimationFrame(update);
+
+      const spacing = 1.0;
+      const barWidth = (width / barCount) - spacing;
+      const midY = canvasHeight / 2;
+
+      ctx.save();
+      // ctx.filter is too heavy for frequent updates on mobile
+      // if (colorHue) ctx.filter = `hue-rotate(${colorHue}deg)`;
+
+      for (let i = 0; i < barCount; i++) {
+        let h = heights[i];
+        
+        if (!isPlaying) {
+          h += (1 - h) * 0.1;
+        } else if (isWave) {
+          const freq = 0.08;
+          const amplitude = 30 * muffle;
+          const offset = time * 0.005 * speedFactor;
+          const target = 40 + Math.sin(i * freq + offset) * amplitude;
+          h += (target - h) * 0.2;
+        } else {
+          let target = (3 + Math.random() * 25);
+          if (Math.random() > 0.99) transientValues[i] = 70 + Math.random() * 30;
+          if (isBeatHit && (i % 32 < 4)) target += (50 + Math.random() * 40);
+          
+          const result = Math.max(target, transientValues[i]) * muffle;
+          transientValues[i] *= 0.82; 
+          h += (result - h) * 0.4;
+        }
+        
+        heights[i] = h;
+
+        const x = i * (barWidth + spacing);
+        const actualHeight = (h / 100) * canvasHeight;
+        ctx.fillStyle = config.color;
+        
+        if (isDots) {
+          ctx.globalAlpha = isPlaying ? 0.6 * muffle : 0.2;
+          ctx.beginPath();
+          ctx.arc(x + barWidth / 2, midY, 2, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (style === "bars") {
+          const halfHeight = Math.max(1, actualHeight / 2);
+          if (h > 60 && isPlaying) {
+            ctx.shadowBlur = 10;
+            ctx.shadowColor = config.glow;
+            ctx.globalAlpha = 0.9 * muffle;
+          } else {
+            ctx.shadowBlur = 0;
+            ctx.globalAlpha = (h / 100) * 0.8 + 0.1;
+          }
+          ctx.fillRect(x, midY - halfHeight, barWidth, halfHeight * 2);
+        } else {
+          ctx.globalAlpha = isPlaying ? 0.6 * muffle : 0.2;
+          ctx.fillRect(x, canvasHeight - actualHeight, barWidth, actualHeight);
+        }
+      }
+
+      ctx.globalAlpha = 0.2 * muffle;
+      ctx.fillStyle = config.color;
+      ctx.fillRect(0, midY - 0.5, width, 1);
+
+      ctx.restore();
+      rafId = requestAnimationFrame(draw);
     };
 
-    rafId = requestAnimationFrame(update);
+    rafId = requestAnimationFrame(draw);
     return () => cancelAnimationFrame(rafId);
-  }, [isPlaying, style, particleSpeed]);
-
-  const colorClass = COLORS[color];
-  const colorStyle = colorHue ? { filter: `hue-rotate(${colorHue}deg)` } : {};
+  }, [isPlaying, style, particleSpeed, color, colorHue, patternComplexity]);
 
   return (
-    <div className="flex items-center justify-center gap-[2px] h-32 w-full max-w-2xl px-4 mb-20 overflow-hidden">
-      {bars.slice(0, patternComplexity * 16).map((height, i) => (
-        <motion.div
-          key={`bar-${i}`}
-          animate={{
-            height: style === "dots" ? "6px" : `${height}%`,
-            opacity: isPlaying ? [0.6 * muffleFactor, 0.9 * muffleFactor, 0.6 * muffleFactor] : 0.2,
-            scaleY: style === "dots" ? 1 : (height / 100 + 0.5) * muffleFactor,
-          }}
-          transition={{
-            type: "spring",
-            stiffness: 400,
-            damping: 30,
-            opacity: { duration: 1.5 / particleSpeed, repeat: Infinity, ease: "easeInOut", delay: i * 0.01 / particleSpeed }
-          }}
-          className={`${
-            style === "dots" ? "w-1.5 h-1.5 rounded-full" : "w-[2px] rounded-full"
-          } ${colorClass} transition-colors duration-500`}
-          style={{
-            transformOrigin: "bottom center",
-            marginBottom: style === "dots" ? `${height / 2}%` : "0",
-            ...colorStyle
-          }}
-        />
-      ))}
+    <div className="h-32 w-full max-w-2xl px-4 mb-10 overflow-hidden flex items-center justify-center">
+      <canvas 
+        ref={canvasRef} 
+        width={800} 
+        height={128} 
+        className="w-full h-full"
+        style={{ imageRendering: 'pixelated' }}
+      />
     </div>
   );
 }
