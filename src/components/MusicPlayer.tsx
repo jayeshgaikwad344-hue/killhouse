@@ -327,7 +327,7 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
       transition={{ duration: 0.8, ease: "easeOut" }}
       className={isHeroMode ? "w-full" : "fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] w-[95vw] max-w-2xl"}
     >
-      <div className={`glass-card p-4 pb-5 rounded-2xl flex flex-col gap-3 ring-1 ring-white/10 shadow-2xl transition-all duration-700 ${
+      <div className={`glass-card p-2.5 sm:p-4 pb-3 sm:pb-5 rounded-2xl flex flex-col gap-2 sm:gap-3 ring-1 ring-white/10 shadow-2xl transition-all duration-700 ${
         isPlaying ? "shadow-[0_0_40px_rgba(255,255,255,0.08)]" : ""
       } ${isMuffled ? "opacity-60" : "opacity-100"} relative overflow-hidden group`}>
         {/* Iridescent Border Overlay */}
@@ -358,7 +358,7 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
           />
         )}
 
-        <div className="flex items-center justify-between gap-4 relative z-10">
+        <div className="flex items-center justify-between gap-2 sm:gap-4 relative z-10">
           <audio 
             ref={audioRef} 
             onEnded={nextTrack}
@@ -373,8 +373,8 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
           />
           
           {/* Track Info */}
-          <div className="flex items-center gap-3 min-w-[140px]">
-            <div className="w-10 h-10 rounded-lg overflow-hidden ring-1 ring-white/10 bg-black/40 relative flex items-center justify-center group-hover:ring-white/30 transition-all">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0 md:min-w-[140px]">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg overflow-hidden ring-1 ring-white/10 bg-black/40 relative flex items-center justify-center group-hover:ring-white/30 transition-all flex-shrink-0">
               <AnimatePresence>
                 {isBufferLoading && (
                   <motion.div 
@@ -433,7 +433,7 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
                 className="w-full h-full object-cover rounded-lg"
               />
             </div>
-            <div className="hidden sm:block">
+            <div className="min-w-0 flex-1 sm:flex-initial">
               <Tooltip text={currentTrack.description}>
                 <div className="overflow-hidden">
                   <AnimatePresence mode="wait">
@@ -444,8 +444,8 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
                       exit={{ y: -20, opacity: 0 }}
                       transition={{ duration: 0.4, ease: [0.33, 1, 0.68, 1] }}
                     >
-                      <h4 className="text-[10px] font-bold text-white uppercase tracking-wider line-clamp-1">{currentTrack.title}</h4>
-                      <p className="text-[8px] opacity-40 uppercase tracking-widest">{currentTrack.artist} • {currentTrack.album}</p>
+                <h4 className="text-[10px] font-bold text-white uppercase tracking-wider line-clamp-1">{currentTrack.title}</h4>
+                <p className="text-[8px] opacity-40 uppercase tracking-widest truncate">{currentTrack.artist} • {currentTrack.album}</p>
                     </motion.div>
                   </AnimatePresence>
                 </div>
@@ -454,15 +454,15 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
           </div>
 
           {/* Controls */}
-          <div className="flex items-center gap-1 sm:gap-4">
+          <div className="flex items-center gap-0.5 sm:gap-4">
             <Tooltip text="Previous">
               <motion.button 
                 whileHover={{ scale: 1.1 }} 
                 whileTap={{ scale: 0.9 }} 
                 onClick={prevTrack} 
-                className="p-1.5 opacity-40 hover:opacity-100 transition-opacity"
+                className="p-2 sm:p-1.5 opacity-40 hover:opacity-100 transition-opacity"
               >
-                <SkipBack size={16} />
+                <SkipBack size={18} />
               </motion.button>
             </Tooltip>
             <div className="relative">
@@ -471,9 +471,9 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
                   whileHover={{ scale: 1.15 }}
                   whileTap={{ scale: 0.9 }}
                   onClick={togglePlay}
-                  className="w-10 h-10 flex items-center justify-center bg-white text-black rounded-full shadow-[0_0_15px_rgba(255,255,255,0.2)] transition-all relative z-10"
+                  className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center bg-white text-black rounded-full shadow-[0_0_15px_rgba(255,255,255,0.2)] transition-all relative z-10"
                 >
-                  {isPlaying ? <Pause size={18} fill="currentColor" /> : <Play size={18} fill="currentColor" className="ml-0.5" />}
+                  {isPlaying ? <Pause className="w-4 h-4 sm:w-[18px] sm:h-[18px]" fill="currentColor" /> : <Play className="w-4 h-4 sm:w-[18px] sm:h-[18px] ml-0.5" fill="currentColor" />}
                 </motion.button>
               </Tooltip>
             </div>
@@ -482,9 +482,9 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
                 whileHover={{ scale: 1.1 }} 
                 whileTap={{ scale: 0.9 }} 
                 onClick={nextTrack} 
-                className="p-1.5 opacity-40 hover:opacity-100 transition-opacity"
+                className="p-2 sm:p-1.5 opacity-40 hover:opacity-100 transition-opacity"
               >
-                <SkipForward size={16} />
+                <SkipForward size={18} />
               </motion.button>
             </Tooltip>
           </div>
@@ -516,9 +516,9 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
                 onClick={() => {
                   setShowTrackList(!showTrackList);
                 }}
-                className={`p-2 border border-white/10 rounded-full transition-colors ${showTrackList ? "bg-white text-black" : "hover:bg-white/10 text-white/40 hover:text-white"}`}
+                className={`p-1.5 sm:p-2 border border-white/10 rounded-full transition-colors ${showTrackList ? "bg-white text-black" : "hover:bg-white/10 text-white/40 hover:text-white"}`}
               >
-                <MusicIcon size={14} />
+                <MusicIcon className="w-3 h-3 sm:w-[14px] sm:h-[14px]" />
               </button>
             </Tooltip>
           </div>
@@ -593,8 +593,8 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
         </AnimatePresence>
 
         {/* Progress Bar */}
-        <div className="px-1 flex items-center gap-2.5">
-          <span className="text-[8px] font-mono opacity-40 w-7">{formatTime(currentTime)}</span>
+        <div className="px-1 flex items-center gap-2 sm:gap-2.5">
+          <span className="text-[7px] sm:text-[8px] font-mono opacity-40 w-6 sm:w-7">{formatTime(currentTime)}</span>
           <input 
             type="range" 
             min="0" 
@@ -603,9 +603,9 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
             value={currentTime}
             onInput={() => {}}
             onChange={handleSeek}
-            className="flex-1 h-0.5 bg-white/10 rounded-lg appearance-none cursor-pointer accent-white"
+            className="flex-1 h-1 bg-white/10 rounded-lg appearance-none cursor-pointer accent-white"
           />
-          <span className="text-[8px] font-mono opacity-40 w-7 text-right">{formatTime(duration)}</span>
+          <span className="text-[7px] sm:text-[8px] font-mono opacity-40 w-6 sm:w-7 text-right">{formatTime(duration)}</span>
         </div>
       </div>
     </motion.div>

@@ -161,43 +161,7 @@ function FallingAssets({ active }: { active: boolean }) {
   );
 }
 
-// New component for the welcome message
-function WelcomeMessage() {
-  const [show, setShow] = useState(false);
 
-  useEffect(() => {
-    const timer = setTimeout(() => setShow(true), 2000);
-    const hideTimer = setTimeout(() => setShow(false), 7000);
-    return () => {
-      clearTimeout(timer);
-      clearTimeout(hideTimer);
-    };
-  }, []);
-
-  return (
-    <AnimatePresence>
-      {show && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.9, y: 10, filter: "blur(10px)" }}
-          transition={{ duration: 1.5, ease: [0.23, 1, 0.32, 1] as any }}
-          className="fixed bottom-40 left-1/2 -translate-x-1/2 z-[110] pointer-events-none"
-        >
-          <div className="glass-card px-10 py-5 rounded-full border border-white/10 bg-black/40 backdrop-blur-3xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex items-center gap-6 ring-1 ring-white/5">
-            <div className="relative">
-              <div className="w-2 h-2 bg-red-600 rounded-full animate-ping absolute inset-0" />
-              <div className="w-2 h-2 bg-red-600 rounded-full relative" />
-            </div>
-            <span className="text-[11px] uppercase tracking-[0.5em] font-black text-white/90 whitespace-nowrap">
-              Killhouse is here to help you
-            </span>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
-}
 
 const RevealText = ({ 
   text, 
@@ -295,6 +259,7 @@ export default function App() {
   const [isFireOnCooldown, setIsFireOnCooldown] = useState(false);
   const [fireIntensity, setFireIntensity] = useState(5);
   const [isPageLoading, setIsPageLoading] = useState(true);
+  const [showStrobeWarning, setShowStrobeWarning] = useState(false);
 
   useEffect(() => {
     document.title = "KILLHOUSE MUSIC";
@@ -397,7 +362,7 @@ export default function App() {
         className="fixed top-0 left-0 right-0 h-1 bg-red-600 origin-left z-[1000]"
         style={{ scaleX: scrollYProgress }}
       />
-      <WelcomeMessage />
+
       <CustomCursor />
       <FireEffect active={isOnFire} intensity={fireIntensity} />
       <DestructionEffect active={isDestructing} intensity={fireIntensity} />
@@ -457,9 +422,9 @@ export default function App() {
             className="flex items-center gap-1.5 sm:gap-2 text-[12px] sm:text-base md:text-lg font-sans font-black uppercase text-red-600 tracking-tighter"
           >
             <img 
-              src="https://detailed-yellow-vfmcmbhdnq.edgeone.dev/Killhouse%20-%20Lost%20Within%20(1).png" 
+              src="https://bumpy-brown-ssbga3sig7.edgeone.dev/Logo%20(White).png" 
               alt="KILLHOUSE logo" 
-              className="w-7 h-7 sm:w-10 sm:h-10 object-contain invert"
+              className="w-10 h-10 sm:w-14 sm:h-14 object-contain"
             />
             <span className="whitespace-nowrap">KILLHOUSE MUSIC</span>
           </motion.a>
@@ -477,22 +442,45 @@ export default function App() {
               title="Spark Intensity"
             />
           )}
-          <div className="scale-[0.22] sm:scale-[0.3] md:scale-[0.35] origin-center -my-20">
-            <label className="uiverse-switch">
-              <input 
-                type="checkbox" 
-                checked={isOnFire} 
-                onChange={handleFireToggle} 
-                disabled={isFireOnCooldown} 
-              />
-              <div className="button">
-                <div className="light"></div>
-                <div className="dots"></div>
-                <div className="characters"></div>
-                <div className="shine"></div>
-                <div className="shadow"></div>
-              </div>
-            </label>
+          <div 
+            className="relative flex flex-col items-center"
+            onMouseEnter={() => setShowStrobeWarning(true)}
+            onMouseLeave={() => setShowStrobeWarning(false)}
+          >
+            <AnimatePresence>
+              {showStrobeWarning && (
+                <motion.div 
+                  initial={{ opacity: 0, y: -10, scale: 0.9 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -10, scale: 0.9 }}
+                  className="absolute top-full mt-10 left-1/2 -translate-x-1/2 w-56 p-3 bg-red-600 text-white text-[9px] font-black uppercase tracking-[0.2em] rounded-lg shadow-[0_0_30px_rgba(220,38,38,0.5)] z-[200] pointer-events-none text-center border border-white/20 leading-relaxed"
+                >
+                  <div className="flex items-center justify-center gap-2 mb-1">
+                    <Zap size={10} className="text-white fill-white" />
+                    <span>Epilepsy Warning</span>
+                    <Zap size={10} className="text-white fill-white" />
+                  </div>
+                  Alerts viewers or gamers with epilepsy to potentially seizure-inducing strobes, flashes, or patterns
+                </motion.div>
+              )}
+            </AnimatePresence>
+            <div className="scale-[0.22] sm:scale-[0.3] md:scale-[0.35] origin-center -my-20">
+              <label className="uiverse-switch">
+                <input 
+                  type="checkbox" 
+                  checked={isOnFire} 
+                  onChange={handleFireToggle} 
+                  disabled={isFireOnCooldown} 
+                />
+                <div className="button">
+                  <div className="light"></div>
+                  <div className="dots"></div>
+                  <div className="characters"></div>
+                  <div className="shine"></div>
+                  <div className="shadow"></div>
+                </div>
+              </label>
+            </div>
           </div>
         </div>
         
@@ -560,15 +548,7 @@ export default function App() {
           </motion.div>
         </div>
 
-        <motion.a 
-          href="#work"
-          animate={{ y: [0, 8, 0], opacity: [0.2, 0.5, 0.2] }}
-          transition={{ repeat: Infinity, duration: 3 }}
-          className="absolute bottom-10 right-16 flex items-center gap-4 rotate-90 origin-right transition-all hover:opacity-100 group"
-        >
-          <span className="text-[10px] uppercase tracking-[0.3em] font-bold group-hover:text-white transition-colors">Scroll to explore</span>
-          <div className="w-12 h-[1px] bg-white/30 group-hover:bg-white transition-colors" />
-        </motion.a>
+
 
         {/* Hero Media Player - Static Here Only */}
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 w-full max-w-2xl px-6">
@@ -609,7 +589,7 @@ export default function App() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}
-            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 sm:gap-8"
+            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-8"
           >
             {PROJECTS.map((project, i) => (
               <motion.div 
@@ -805,7 +785,7 @@ export default function App() {
             <p className="text-xs uppercase tracking-[0.2em] font-semibold opacity-40">The engine behind the sound</p>
 
 
-          <div className="grid grid-cols-2 lg:grid-cols-5 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6">
             {TRACKS.map((track, i) => (
               <Tooltip key={track.id} text={`Play ${track.title} by ${track.artist}`}>
                 <motion.div 
