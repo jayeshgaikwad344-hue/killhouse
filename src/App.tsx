@@ -287,7 +287,6 @@ export default function App() {
               src="/cover-arts/logo.png" 
               alt="KILLHOUSE logo" 
               className="w-10 h-10 sm:w-14 sm:h-14 object-contain"
-              referrerPolicy="no-referrer"
             />
             <span className="whitespace-nowrap">KILLHOUSE MUSIC</span>
           </motion.a>
@@ -435,7 +434,6 @@ export default function App() {
                           ? "opacity-100 scale-105" 
                           : "opacity-60 group-hover:opacity-100"
                       }`}
-                      referrerPolicy="no-referrer"
                     />
                     <div className={`absolute inset-0 flex items-center justify-center bg-black/40 transition-opacity duration-500 ${
                       currentTrackIndex === (i % TRACKS.length) && isPlaying ? "opacity-100" : "opacity-0 group-hover:opacity-100"
@@ -627,7 +625,6 @@ export default function App() {
                       className={`w-full h-full object-cover transition-all duration-700 ${
                         currentTrackIndex === i ? "scale-110 opacity-100" : "opacity-60 group-hover:opacity-100 group-hover:scale-110"
                       }`} 
-                      referrerPolicy="no-referrer"
                     />
                     <div className={`absolute inset-0 flex items-center justify-center transition-opacity bg-black/40 ${
                       currentTrackIndex === i ? "opacity-100" : "opacity-0 group-hover:opacity-100"

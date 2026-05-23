@@ -449,7 +449,6 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
                   }}
                 src={currentTrack.image} 
                 className="w-full h-full object-cover rounded-lg"
-                referrerPolicy="no-referrer"
               />
             </div>
             <div className="min-w-0 flex-1 sm:flex-initial">
@@ -575,7 +574,6 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
                         className={`w-full h-full object-cover rounded shadow-md transition-transform duration-500 group-hover/track:scale-110 ${
                           currentTrackIndex === index ? "brightness-110" : "brightness-50"
                         }`}
-                        referrerPolicy="no-referrer"
                       />
                       {currentTrackIndex === index && isPlaying && (
                         <div className="absolute inset-0 flex items-center justify-center">

@@ -22,7 +22,6 @@ const AlbumArtCard = React.memo(({ title, image, index, total, radius }: any) =>
           alt={title} 
           className="w-full h-full object-cover rounded-xl border border-white/10 shadow-2xl" 
           loading="lazy"
-          referrerPolicy="no-referrer"
         />
         
         <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 bg-gradient-to-t from-black/90 via-black/40 to-transparent rounded-b-xl z-30">
@@ -56,7 +55,7 @@ export const TrackCard = ({ title, genre, duration, color, image }: any) => {
     >
       <div className="flex items-center justify-between mb-8">
         <div className={cn("w-24 h-24 bg-black/40 rounded-2xl overflow-hidden border", borderColors[color] || "border-white/10")}>
-          <img src={image} alt={title} className="w-full h-full object-cover transition-all duration-700" loading="lazy" referrerPolicy="no-referrer" />
+          <img src={image} alt={title} className="w-full h-full object-cover transition-all duration-700" loading="lazy" />
         </div>
         <span className="text-[10px] font-mono text-white/20 uppercase tracking-[0.2em]">{duration}</span>
       </div>
