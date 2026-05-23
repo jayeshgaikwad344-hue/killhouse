@@ -44,6 +44,7 @@ export default function MiniPlayer({
             animate={{ opacity: 1 }}
             src={currentTrack.image}
             className="w-full h-full object-cover"
+            referrerPolicy="no-referrer"
           />
         </div>
         <div className="flex flex-col">
