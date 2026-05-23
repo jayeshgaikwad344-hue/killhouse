@@ -15,6 +15,7 @@ interface Particle {
 
 export default function AmbientParticles({ isPlaying }: { isPlaying: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const isInViewRef = useRef(true);
   const { scrollYProgress } = useScroll();
   const scrollValueRef = useRef(0);
   
@@ -23,32 +24,33 @@ export default function AmbientParticles({ isPlaying }: { isPlaying: boolean }) 
   });
 
   const particles = useMemo(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) return []; // Save CPU on mobile
     const p: Particle[] = [];
     // Standard particles
-    for (let i = 0; i < 40; i++) {
+    for (let i = 0; i < 15; i++) {
       p.push({
         x: Math.random() * 100,
         y: Math.random() * 100,
         size: Math.random() * 2 + 0.5,
-        speedY: (Math.random() - 0.5) * 0.02,
-        speedX: (Math.random() - 0.5) * 0.02,
+        speedY: (Math.random() - 0.5) * 0.01,
+        speedX: (Math.random() - 0.5) * 0.01,
         opacity: Math.random(),
-        maxOpacity: 0.1 + Math.random() * 0.3,
-        pulseSpeed: 0.01 + Math.random() * 0.02,
+        maxOpacity: 0.1 + Math.random() * 0.2,
+        pulseSpeed: 0.005 + Math.random() * 0.01,
         pulsePhase: Math.random() * Math.PI * 2
       });
     }
     // Larger motes
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < 2; i++) {
         p.push({
             x: Math.random() * 100,
             y: Math.random() * 100,
-            size: Math.random() * 15 + 10,
-            speedY: (Math.random() * 0.05) + 0.02,
-            speedX: (Math.random() - 0.5) * 0.02,
+            size: Math.random() * 10 + 5,
+            speedY: (Math.random() * 0.03) + 0.01,
+            speedX: (Math.random() - 0.5) * 0.01,
             opacity: 0,
-            maxOpacity: 0.05 + Math.random() * 0.1,
-            pulseSpeed: 0.005 + Math.random() * 0.01,
+            maxOpacity: 0.03 + Math.random() * 0.05,
+            pulseSpeed: 0.003 + Math.random() * 0.007,
             pulsePhase: Math.random() * Math.PI * 2
         });
     }
@@ -64,7 +66,22 @@ export default function AmbientParticles({ isPlaying }: { isPlaying: boolean }) 
 
     let rafId: number;
 
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const wasInView = isInViewRef.current;
+        isInViewRef.current = entry.isIntersecting;
+        if (entry.isIntersecting && !wasInView) {
+          rafId = requestAnimationFrame(draw);
+        }
+      },
+      { threshold: 0 }
+    );
+    observer.observe(canvas);
+
     const draw = (time: number) => {
+      if (!isInViewRef.current) {
+        return;
+      }
       const { width, height } = canvas;
       ctx.clearRect(0, 0, width, height);
 
@@ -96,12 +113,10 @@ export default function AmbientParticles({ isPlaying }: { isPlaying: boolean }) 
           ctx.arc(drawX, drawY, p.size, 0, Math.PI * 2);
           ctx.fill();
         } else {
-          // Larger motes with blur (simulated with gradient)
-          const gradient = ctx.createRadialGradient(drawX, drawY, 0, drawX, drawY, p.size);
-          gradient.addColorStop(0, `rgba(255, 255, 255, ${currentOpacity})`);
-          gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-          ctx.fillStyle = gradient;
-          ctx.fillRect(drawX - p.size, drawY - p.size, p.size * 2, p.size * 2);
+          // Larger motes with simpler look for performance
+          ctx.fillStyle = `rgba(255, 255, 255, ${currentOpacity * 0.4})`;
+          ctx.arc(drawX, drawY, p.size, 0, Math.PI * 2);
+          ctx.fill();
         }
       });
 

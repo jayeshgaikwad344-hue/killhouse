@@ -13,6 +13,9 @@ export default function CustomCursor() {
   const [isHovering, setIsHovering] = useState(false);
 
   useEffect(() => {
+    const isMobileDevice = window.matchMedia("(max-width: 1023px)").matches || window.matchMedia("(pointer: coarse)").matches;
+    if (isMobileDevice) return;
+
     const moveCursor = (e: MouseEvent) => {
       cursorX.set(e.clientX);
       cursorY.set(e.clientY);
@@ -21,16 +24,13 @@ export default function CustomCursor() {
 
     const handleMouseOver = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      if (
+      const isOverInteractive = !!(
         target.tagName === "BUTTON" || 
         target.tagName === "A" || 
         target.closest("button") || 
         target.closest("a")
-      ) {
-        setIsHovering(true);
-      } else {
-        setIsHovering(false);
-      }
+      );
+      setIsHovering(prev => prev === isOverInteractive ? prev : isOverInteractive);
     };
 
     window.addEventListener("mousemove", moveCursor);

@@ -4,16 +4,16 @@ import { useState, useRef, useEffect, ChangeEvent } from "react";
 import Tooltip from "./Tooltip";
 
 export const TRACKS = [
-  { id: 1, title: "Chakravyuh", artist: "KILLHOUSE", album: "CHAOS: CH 1", description: "Minimalist trap beats combined with heavy soundscapes.", url: "https://golden-maroon-gst9h0fitx.edgeone.dev/chakravyuha%20killhouse%20music.mp3", image: "https://concrete-copper-aqe9zmq49p.edgeone.dev/Chapter%201.png" },
-  { id: 2, title: "ASTITVA", artist: "KILLHOUSE", album: "CHAOS: CH 2", description: "Pulsing drill-infused beats capturing existential reflection.", url: "https://growing-cyan-7wof7ooqa1.edgeone.dev/chaos%20astitva%20drillbeat%20.mp3", image: "https://sore-lavender-i0dgwjj1le.edgeone.dev/Chapter%202.png" },
-  { id: 3, title: "Aghata", artist: "KILLHOUSE", album: "CHAOS: CH 3", description: "Intense industrial rhythms and complex textures.", url: "https://essential-ivory-3oxa3lgucg.edgeone.dev/chaos%20Aghata%202.mp3", image: "https://excited-chocolate-bkoyi0fko5.edgeone.dev/Chapter%203%20(1).png" },
-  { id: 4, title: "Pran", artist: "KILLHOUSE", album: "CHAOS: CH 4", description: "Atmospheric textures meet hard-hitting percussion.", url: "https://liberal-ivory-59op6iuksv.edgeone.dev/Pran%20drill%20.mp3", image: "https://sick-emerald-tbxbsseams.edgeone.dev/Chapter%204%20(1).png" },
-  { id: 5, title: "Karm", artist: "KILLHOUSE", album: "CHAOS: CH 5", description: "The final descent into architectural acoustic decay.", url: "https://written-rose-9dp2lmb3yz.edgeone.dev/karm%20anitmah%20adhyayah%20.mp3", image: "https://systematic-blue-kf0j1b4fce.edgeone.dev/Chapter%205%20(1).png" },
-  { id: 6, title: "Aarzoo", artist: "KILLHOUSE", album: "KILLHOUSE MUSIC", description: "Emotional depth meets rhythmic precision in this latest soundscape.", url: "https://definite-olive-aqzvmzrjrs.edgeone.dev/Aarzoo%20mp3.mp3", image: "https://tart-plum-cvaigpma8j.edgeone.dev/AARZOO%20(1)%20(1).png" },
-  { id: 7, title: "Kasoor", artist: "KILLHOUSE", album: "Sin & Redemption", description: "Raw emotional honesty mixed with heavy synth elements.", url: "https://eligible-coffee-8qv8qjkjzb.edgeone.dev/kasoor%20killhouse%20music.mp3", image: "https://elated-bronze-x8zkclgmjj.edgeone.dev/Killhouse%20-%20Kasoor.png" },
-  { id: 8, title: "Lost Within", artist: "KILLHOUSE", album: "KILLHOUSE MUSIC", description: "Immersive soundscapes reflecting cinematic exploration.", url: "https://universal-crimson-uvgprdwmzi.edgeone.dev/LOST%20WITHIN%20-%20KILLHOUSE%20MUSIC.mp3", image: "https://detailed-yellow-vfmcmbhdnq.edgeone.dev/Killhouse%20-%20Lost%20Within%20(1).png" },
-  { id: 9, title: "Noor", artist: "KILLHOUSE", album: "KILLHOUSE MUSIC", description: "Atmospheric soundscapes blending traditional elements with modern electronic textures.", url: "https://marginal-aquamarine-eca0p8ichj.edgeone.dev/Noor%20killhouse%20music%20mp3%20for%20spotify.mp3", image: "https://civilian-coffee-1avghlfesy.edgeone.dev/WhatsApp%20Image%202026-05-16%20at%2012.03.18%20PM.jpeg" },
-  { id: 10, title: "Pal Pal x Haseen x Ishq", artist: "KILLHOUSE", album: "KILLHOUSE MUSIC", description: "Deep dive into cinematic sound design and industrial precision.", url: "https://religious-bronze-wyb95ktqmg.edgeone.dev/mashup%20-%203%20db.mp3", image: "https://reasonable-turquoise-byemxoiogy.edgeone.dev/ChatGPT%20Image%20May%2016,%202026,%2006_51_53%20PM.png" },
+  { id: 1, title: "Chakravyuh", artist: "KILLHOUSE", album: "CHAOS: CH 1", description: "Minimalist trap beats combined with heavy soundscapes.", url: "https://golden-maroon-gst9h0fitx.edgeone.dev/chakravyuha%20killhouse%20music.mp3", image: "/cover-arts/chapter1.jpg" },
+  { id: 2, title: "ASTITVA", artist: "KILLHOUSE", album: "CHAOS: CH 2", description: "Pulsing drill-infused beats capturing existential reflection.", url: "https://growing-cyan-7wof7ooqa1.edgeone.dev/chaos%20astitva%20drillbeat%20.mp3", image: "/cover-arts/chapter2.jpg" },
+  { id: 3, title: "Aghata", artist: "KILLHOUSE", album: "CHAOS: CH 3", description: "Intense industrial rhythms and complex textures.", url: "https://essential-ivory-3oxa3lgucg.edgeone.dev/chaos%20Aghata%202.mp3", image: "/cover-arts/chapter3.jpg" },
+  { id: 4, title: "Pran", artist: "KILLHOUSE", album: "CHAOS: CH 4", description: "Atmospheric textures meet hard-hitting percussion.", url: "https://liberal-ivory-59op6iuksv.edgeone.dev/Pran%20drill%20.mp3", image: "/cover-arts/chapter4.jpg" },
+  { id: 5, title: "Karm", artist: "KILLHOUSE", album: "CHAOS: CH 5", description: "The final descent into architectural acoustic decay.", url: "https://written-rose-9dp2lmb3yz.edgeone.dev/karm%20anitmah%20adhyayah%20.mp3", image: "/cover-arts/chapter5.jpg" },
+  { id: 6, title: "Aarzoo", artist: "KILLHOUSE", album: "KILLHOUSE MUSIC", description: "Emotional depth meets rhythmic precision in this latest soundscape.", url: "https://definite-olive-aqzvmzrjrs.edgeone.dev/Aarzoo%20mp3.mp3", image: "/cover-arts/aarzoo.jpg" },
+  { id: 7, title: "Kasoor", artist: "KILLHOUSE", album: "Sin & Redemption", description: "Raw emotional honesty mixed with heavy synth elements.", url: "https://eligible-coffee-8qv8qjkjzb.edgeone.dev/kasoor%20killhouse%20music.mp3", image: "/cover-arts/kasoor.jpg" },
+  { id: 8, title: "Lost Within", artist: "KILLHOUSE", album: "KILLHOUSE MUSIC", description: "Immersive soundscapes reflecting cinematic exploration.", url: "https://universal-crimson-uvgprdwmzi.edgeone.dev/LOST%20WITHIN%20-%20KILLHOUSE%20MUSIC.mp3", image: "/cover-arts/lost-within.jpg" },
+  { id: 9, title: "Noor", artist: "KILLHOUSE", album: "KILLHOUSE MUSIC", description: "Atmospheric soundscapes blending traditional elements with modern electronic textures.", url: "https://marginal-aquamarine-eca0p8ichj.edgeone.dev/Noor%20killhouse%20music%20mp3%20for%20spotify.mp3", image: "/cover-arts/noor.jpeg" },
+  { id: 10, title: "Pal Pal x Haseen x Ishq", artist: "KILLHOUSE", album: "KILLHOUSE MUSIC", description: "Deep dive into cinematic sound design and industrial precision.", url: "https://religious-bronze-wyb95ktqmg.edgeone.dev/mashup%20-%203%20db.mp3", image: "/cover-arts/mashup.jpg" },
 ];
 
 interface MusicPlayerProps {
@@ -41,7 +41,18 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
 
   const currentTrack = TRACKS[currentTrackIndex];
 
-  const [useWebAudio, setUseWebAudio] = useState(true);
+  const [useWebAudio, setUseWebAudio] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('killhouse_audio_cors_failed') !== 'true';
+    }
+    return true;
+  });
+
+  useEffect(() => {
+    if (!useWebAudio) {
+      localStorage.setItem('killhouse_audio_cors_failed', 'true');
+    }
+  }, [useWebAudio]);
 
   useEffect(() => {
     if (audioRef.current && !activeAudioRef.current) {
@@ -93,6 +104,9 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
     return () => {
       window.removeEventListener("click", handleInteraction);
       window.removeEventListener("touchstart", handleInteraction);
+      if (audioContextRef.current) {
+        audioContextRef.current.close().catch(console.error);
+      }
     };
   }, [useWebAudio]);
 
@@ -125,23 +139,34 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
   useEffect(() => {
     const handleError = (e: Event) => {
       const audio = e.target as HTMLAudioElement;
+      
+      // If we were trying to use Web Audio (anonymous CORS) and it failed, fallback to standard playback
       if (audio.crossOrigin === "anonymous") {
-        console.warn("CORS/Media error detected. Disabling Web Audio (LPF) for this session to ensure playback.");
+        console.warn("CORS/Media error detected for URL:", audio.src, "Disabling Web Audio (LPF) for this session to ensure playback.");
         setUseWebAudio(false);
-        // Clean up both elements
+        
+        // Remove CORS attribute and reload to fix playback
         if (audioRef.current) {
           audioRef.current.removeAttribute("crossOrigin");
-          audioRef.current.load();
         }
         if (audio2Ref.current) {
           audio2Ref.current.removeAttribute("crossOrigin");
-          audio2Ref.current.load();
         }
-        if (isPlaying && activeAudioRef.current) {
-          activeAudioRef.current.play().catch(console.error);
+        
+        // Force reload the current source without CORS
+        audio.load();
+        
+        // Resume playback if it was supposed to be playing
+        if (isPlaying) {
+          // Give it a tiny moment to reload
+          setTimeout(() => {
+            audio.play().catch(err => {
+              if (err.name !== "AbortError") console.error("Playback recovery failed:", err);
+            });
+          }, 100);
         }
       } else {
-        console.error("Audio Load Error:", e);
+        console.error("Standard Audio Load Error:", e);
       }
     };
 
@@ -166,8 +191,8 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
         activeAudioRef.current.volume = Math.min(1, targetVol * volume * 2);
       }
       
-      // LPF Frequency mapping aligned with user snippet (20000Hz down to 500Hz)
-      if (filterRef.current && audioContextRef.current) {
+      // LPF Frequency mapping - ONLY if Web Audio is working
+      if (useWebAudio && filterRef.current && audioContextRef.current) {
         const minFreq = 500;
         const maxFreq = 20000;
         const frequency = maxFreq - (latest * (maxFreq - minFreq));
@@ -175,14 +200,14 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
         filterRef.current.frequency.setTargetAtTime(
           Math.max(minFreq, frequency), 
           audioContextRef.current.currentTime, 
-          0.03 // faster response for accurate scroll tracking
+          0.03 
         );
       }
 
       setIsMuffled(latest > 0.1);
     });
     return () => unsub();
-  }, [scrollProgress, volume]);
+  }, [scrollProgress, volume, useWebAudio]);
 
   useEffect(() => {
     if (activeAudioRef.current) {
@@ -321,26 +346,19 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
       initial={isHeroMode ? { opacity: 0, y: 20 } : { y: 100 }}
       animate={{ 
         y: 0,
-        opacity: 1,
-        filter: isMuffled ? "blur(2px)" : "blur(0px)"
+        opacity: 1
       }}
       transition={{ duration: 0.8, ease: "easeOut" }}
       className={isHeroMode ? "w-full" : "fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] w-[95vw] max-w-2xl"}
     >
       <div className={`glass-card p-2.5 sm:p-4 pb-3 sm:pb-5 rounded-2xl flex flex-col gap-2 sm:gap-3 ring-1 ring-white/10 shadow-2xl transition-all duration-700 ${
-        isPlaying ? "shadow-[0_0_40px_rgba(255,255,255,0.08)]" : ""
+        isPlaying ? "shadow-[0_0_20px_rgba(255,255,255,0.05)]" : ""
       } ${isMuffled ? "opacity-60" : "opacity-100"} relative overflow-hidden group`}>
-        {/* Iridescent Border Overlay */}
+        {/* Iridescent Border Overlay - Simplified */}
         <div className="absolute inset-0 rounded-2xl pointer-events-none border border-white/5 opacity-50" />
-        <div className={`absolute inset-[-1px] rounded-2xl pointer-events-none opacity-[0.15] transition-opacity duration-1000 ${isPlaying ? "opacity-[0.35] animate-iridescent" : ""}`} 
-             style={{ 
-               background: 'linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.4) 25%, transparent 50%, rgba(150,150,255,0.2) 75%, transparent 100%)',
-               maskImage: 'linear-gradient(black, black) content-box, linear-gradient(black, black)',
-               maskComposite: 'exclude',
-               WebkitMaskComposite: 'destination-out',
-               padding: '1px'
-             }} 
-        />
+        {isPlaying && (
+          <div className="absolute inset-0 rounded-2xl pointer-events-none opacity-[0.1] bg-gradient-to-tr from-blue-500/20 via-purple-500/20 to-red-500/20 animate-pulse" />
+        )}
 
         {/* Pulsing Playback Glow */}
         {isPlaying && (

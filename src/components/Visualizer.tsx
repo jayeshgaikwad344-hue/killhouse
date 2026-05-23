@@ -42,6 +42,22 @@ export default function Visualizer({
     return () => unsubscribe();
   }, [scrollProgress]);
 
+  const isInViewRef = useRef(true);
+
+  useEffect(() => {
+    if (!canvasRef.current) return;
+    
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isInViewRef.current = entry.isIntersecting;
+      },
+      { threshold: 0.1 }
+    );
+    
+    observer.observe(canvasRef.current);
+    return () => observer.disconnect();
+  }, []);
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -49,13 +65,18 @@ export default function Visualizer({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const barCount = 128;
+    const barCount = 48;
     let heights = Array.from({ length: barCount }, () => 2);
     let transientValues = Array.from({ length: barCount }, () => 0);
     let lastBeatTime = 0;
     let rafId: number;
 
     const draw = (time: number) => {
+      if (!isInViewRef.current) {
+        rafId = requestAnimationFrame(draw);
+        return;
+      }
+
       const { width, height: canvasHeight } = canvas;
       ctx.clearRect(0, 0, width, canvasHeight);
 
@@ -71,32 +92,30 @@ export default function Visualizer({
         lastBeatTime = time;
       }
 
-      const spacing = 1.0;
+      const spacing = 5.0;
       const barWidth = (width / barCount) - spacing;
       const midY = canvasHeight / 2;
 
       ctx.save();
-      // ctx.filter is too heavy for frequent updates on mobile
-      // if (colorHue) ctx.filter = `hue-rotate(${colorHue}deg)`;
-
+      
       for (let i = 0; i < barCount; i++) {
         let h = heights[i];
         
         if (!isPlaying) {
           h += (1 - h) * 0.1;
         } else if (isWave) {
-          const freq = 0.08;
-          const amplitude = 30 * muffle;
+          const freq = 0.2;
+          const amplitude = 25 * muffle;
           const offset = time * 0.005 * speedFactor;
           const target = 40 + Math.sin(i * freq + offset) * amplitude;
           h += (target - h) * 0.2;
         } else {
-          let target = (3 + Math.random() * 25);
-          if (Math.random() > 0.99) transientValues[i] = 70 + Math.random() * 30;
-          if (isBeatHit && (i % 32 < 4)) target += (50 + Math.random() * 40);
+          let target = (3 + Math.random() * 20);
+          if (Math.random() > 0.99) transientValues[i] = 60 + Math.random() * 30;
+          if (isBeatHit && (i % 8 < 2)) target += (40 + Math.random() * 40);
           
           const result = Math.max(target, transientValues[i]) * muffle;
-          transientValues[i] *= 0.82; 
+          transientValues[i] *= 0.8; 
           h += (result - h) * 0.4;
         }
         
@@ -107,24 +126,23 @@ export default function Visualizer({
         ctx.fillStyle = config.color;
         
         if (isDots) {
-          ctx.globalAlpha = isPlaying ? 0.6 * muffle : 0.2;
+          ctx.globalAlpha = isPlaying ? (h / 100) * 0.6 + 0.3 * muffle : 0.2;
+          const radius = Math.max(1, (h / 100) * 2);
+          const yOffset = (h / 100) * 30;
+          
           ctx.beginPath();
-          ctx.arc(x + barWidth / 2, midY, 2, 0, Math.PI * 2);
+          ctx.arc(x + barWidth / 2, midY - yOffset, radius, 0, Math.PI * 2);
+          ctx.arc(x + barWidth / 2, midY + yOffset, radius, 0, Math.PI * 2);
           ctx.fill();
-        } else if (style === "bars") {
-          const halfHeight = Math.max(1, actualHeight / 2);
-          if (h > 60 && isPlaying) {
-            ctx.shadowBlur = 10;
-            ctx.shadowColor = config.glow;
-            ctx.globalAlpha = 0.9 * muffle;
-          } else {
-            ctx.shadowBlur = 0;
-            ctx.globalAlpha = (h / 100) * 0.8 + 0.1;
-          }
-          ctx.fillRect(x, midY - halfHeight, barWidth, halfHeight * 2);
         } else {
-          ctx.globalAlpha = isPlaying ? 0.6 * muffle : 0.2;
-          ctx.fillRect(x, canvasHeight - actualHeight, barWidth, actualHeight);
+          const halfHeight = Math.max(1, actualHeight / 2);
+          ctx.globalAlpha = (h / 100) * 0.7 + 0.1;
+          
+          if (style === "bars") {
+            ctx.fillRect(x, midY - halfHeight, barWidth, halfHeight * 2);
+          } else {
+            ctx.fillRect(x, canvasHeight - actualHeight, barWidth, actualHeight);
+          }
         }
       }
 

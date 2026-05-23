@@ -3,65 +3,35 @@ import { motion, useAnimationFrame, useMotionValue, useSpring } from 'motion/rea
 import { Play } from 'lucide-react';
 import { cn } from '../lib/utils';
 
-const AlbumArtCard = ({ title, image, index, total, radius }: any) => {
+const AlbumArtCard = React.memo(({ title, image, index, total, radius }: any) => {
   const angle = (index / total) * 360;
   
   return (
     <div
       className="absolute w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-40 lg:h-40 cursor-pointer group"
       style={{
-        transform: `rotateY(${angle}deg) translateZ(${radius}px)`,
+        transform: `rotateY(${angle}deg) translate3d(0, 0, ${radius}px)`,
         transformStyle: "preserve-3d",
         backfaceVisibility: "hidden",
         willChange: "transform"
       }}
     >
-      <div className="w-full h-full relative group-hover:scale-110 transition-transform duration-500 shadow-2xl">
-        {/* Physical Sleeve Effect */}
-        <div className="absolute inset-0 z-20 pointer-events-none bg-gradient-to-tr from-white/10 via-transparent to-white/10 opacity-30 rounded-xl" />
+      <div className="w-full h-full relative group-hover:scale-110 transition-transform duration-500">
         <img 
           src={image} 
           alt={title} 
-          className="w-full h-full object-cover rounded-xl border border-white/10 transition-all duration-700 shadow-[0_0_30px_rgba(0,0,0,0.5)]" 
+          className="w-full h-full object-cover rounded-xl border border-white/10 shadow-2xl" 
           loading="lazy"
         />
         
-        {/* Persistent Title Overlay - Bottom Bar */}
         <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-3 bg-gradient-to-t from-black/90 via-black/40 to-transparent rounded-b-xl z-30">
           <p className="text-[7px] sm:text-[9px] font-mono text-red-500/80 uppercase tracking-[0.2em] mb-0.5 font-bold">KILLHOUSE</p>
           <h4 className="text-white font-display font-black uppercase text-[9px] sm:text-[11px] md:text-[13px] leading-tight tracking-tight truncate">{title}</h4>
         </div>
       </div>
-      
-      {/* Label on the "floor" plane for extra atmosphere like the reference */}
-      <div 
-        className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap opacity-20 group-hover:opacity-60 transition-opacity hidden sm:block"
-        style={{
-          transform: "rotateX(90deg) translateZ(0)",
-          transformStyle: "preserve-3d"
-        }}
-      >
-        <span className="text-[8px] sm:text-[10px] font-mono font-black text-white uppercase tracking-[0.4em]">{title}</span>
-      </div>
-      
-      {/* Reflection effect - Hidden on mobile for performance */}
-      <div 
-        className="absolute w-full h-1/2 top-[102%] left-0 opacity-10 pointer-events-none scale-y-[-1] blur-md overflow-hidden hidden md:block"
-        style={{
-          maskImage: "linear-gradient(to bottom, rgba(0,0,0,0.4), transparent)",
-          WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,0.4), transparent)"
-        }}
-      >
-        <img 
-          src={image} 
-          alt="" 
-          className="w-full h-full object-cover rounded-xl" 
-          loading="lazy"
-        />
-      </div>
     </div>
   );
-};
+});
 
 export const TrackCard = ({ title, genre, duration, color, image }: any) => {
   const accentColors: Record<string, string> = {
@@ -115,16 +85,16 @@ const HeavyArchiveCarousel = ({
   const containerRef = useRef<HTMLDivElement>(null);
   
   const albumsData = [
-    { id: 1, title: "Chakravyuh", image: "https://concrete-copper-aqe9zmq49p.edgeone.dev/Chapter%201.png" },
-    { id: 2, title: "ASTITVA", image: "https://sore-lavender-i0dgwjj1le.edgeone.dev/Chapter%202.png" }, 
-    { id: 3, title: "Aghata", image: "https://excited-chocolate-bkoyi0fko5.edgeone.dev/Chapter%203%20(1).png" },
-    { id: 4, title: "Pran", image: "https://sick-emerald-tbxbsseams.edgeone.dev/Chapter%204%20(1).png" },
-    { id: 5, title: "Karm", image: "https://systematic-blue-kf0j1b4fce.edgeone.dev/Chapter%205%20(1).png" },
-    { id: 6, title: "Aarzoo", image: "https://tart-plum-cvaigpma8j.edgeone.dev/AARZOO%20(1)%20(1).png" },
-    { id: 7, title: "Kasoor", image: "https://elated-bronze-x8zkclgmjj.edgeone.dev/Killhouse%20-%20Kasoor.png" },
-    { id: 8, title: "Lost Within", image: "https://detailed-yellow-vfmcmbhdnq.edgeone.dev/Killhouse%20-%20Lost%20Within%20(1).png" },
-    { id: 9, title: "Noor", image: "https://civilian-coffee-1avghlfesy.edgeone.dev/WhatsApp%20Image%202026-05-16%20at%2012.03.18%20PM.jpeg" },
-    { id: 10, title: "Pal Pal x Haseen x Ishq", image: "https://reasonable-turquoise-byemxoiogy.edgeone.dev/ChatGPT%20Image%20May%2016,%202026,%2006_51_53%20PM.png" },
+    { id: 1, title: "Chakravyuh", image: "/cover-arts/chapter1.jpg" },
+    { id: 2, title: "ASTITVA", image: "/cover-arts/chapter2.jpg" }, 
+    { id: 3, title: "Aghata", image: "/cover-arts/chapter3.jpg" },
+    { id: 4, title: "Pran", image: "/cover-arts/chapter4.jpg" },
+    { id: 5, title: "Karm", image: "/cover-arts/chapter5.jpg" },
+    { id: 6, title: "Aarzoo", image: "/cover-arts/aarzoo.jpg" },
+    { id: 7, title: "Kasoor", image: "/cover-arts/kasoor.jpg" },
+    { id: 8, title: "Lost Within", image: "/cover-arts/lost-within.jpg" },
+    { id: 9, title: "Noor", image: "/cover-arts/noor.jpeg" },
+    { id: 10, title: "Pal Pal x Haseen x Ishq", image: "/cover-arts/mashup.jpg" },
   ];
 
   useEffect(() => {

@@ -30,26 +30,23 @@ import Tooltip from "./components/Tooltip";
 import HeavyArchiveCarousel from "./components/HeavyArchiveCarousel";
 import { getVisualAdjustments, VisualAdjustments } from "./services/geminiVisualService";
 
-import CustomCursor from "./components/CustomCursor";
 import AmbientBackground from "./components/AmbientBackground";
 import AmbientParticles from "./components/AmbientParticles";
 import HeartbeatWaves from "./components/HeartbeatWaves";
 import SmoothScroll from "./components/SmoothScroll";
-import FireEffect from "./components/FireEffect";
-import DestructionEffect from "./components/DestructionEffect";
 import SpeederLoader from "./components/SpeederLoader";
 
 const PROJECTS = [
-  { id: 1, title: "Chakravyuh", category: "CHAOS: CHAPTER 1", description: "Minimalist trap beats combined with heavy, metallic industrial soundscapes, exploring harsh textures in contemporary music.", image: "https://concrete-copper-aqe9zmq49p.edgeone.dev/Chapter%201.png" },
-  { id: 2, title: "ASTITVA", category: "CHAOS: CHAPTER 2", description: "Pulsing drill-infused beats capturing existential reflection, exploring the raw essence of sound in a modern urban landscape.", image: "https://sore-lavender-i0dgwjj1le.edgeone.dev/Chapter%202.png" },
-  { id: 3, title: "Aghata", category: "CHAOS: CHAPTER 3", description: "Intense industrial rhythms and complex textures defining the next stage of sonic evolution.", image: "https://excited-chocolate-bkoyi0fko5.edgeone.dev/Chapter%203%20(1).png" },
-  { id: 4, title: "Pran", category: "CHAOS: CHAPTER 4", description: "Atmospheric textures meet hard-hitting percussion, creating a sense of life within the machine.", image: "https://sick-emerald-tbxbsseams.edgeone.dev/Chapter%204%20(1).png" },
-  { id: 5, title: "Karm", category: "CHAOS: CHAPTER 5", description: "The final descent into architectural acoustic decay, where sound meets silence.", image: "https://systematic-blue-kf0j1b4fce.edgeone.dev/Chapter%205%20(1).png" },
-  { id: 6, title: "Aarzoo", category: "KILLHOUSE MUSIC", description: "Emotional depth meets rhythmic precision in this latest soundscape exploration.", image: "https://tart-plum-cvaigpma8j.edgeone.dev/AARZOO%20(1)%20(1).png" },
-  { id: 7, title: "Kasoor", category: "KILLHOUSE MUSIC", description: "Raw emotional honesty mixed with heavy synth elements, capturing the intersection of human movement and sound.", image: "https://elated-bronze-x8zkclgmjj.edgeone.dev/Killhouse%20-%20Kasoor.png" },
-  { id: 8, title: "Lost Within", category: "KILLHOUSE MUSIC", description: "Immersive soundscapes reflecting cinematic exploration and the search for internal resonance.", image: "https://detailed-yellow-vfmcmbhdnq.edgeone.dev/Killhouse%20-%20Lost%20Within%20(1).png" },
-  { id: 9, title: "Noor", category: "KILLHOUSE MUSIC", description: "Atmospheric soundscapes blending traditional elements with modern electronic textures.", image: "https://civilian-coffee-1avghlfesy.edgeone.dev/WhatsApp%20Image%202026-05-16%20at%2012.03.18%20PM.jpeg" },
-  { id: 10, title: "Pal Pal x Haseen x Ishq", category: "KILLHOUSE MUSIC", description: "A deep dive into cinematic sound design, blending organic textures with modern industrial precision.", image: "https://reasonable-turquoise-byemxoiogy.edgeone.dev/ChatGPT%20Image%20May%2016,%202026,%2006_51_53%20PM.png" },
+  { id: 1, title: "Chakravyuh", category: "CHAOS: CHAPTER 1", description: "Minimalist trap beats combined with heavy, metallic industrial soundscapes, exploring harsh textures in contemporary music.", image: "/cover-arts/chapter1.jpg" },
+  { id: 2, title: "ASTITVA", category: "CHAOS: CHAPTER 2", description: "Pulsing drill-infused beats capturing existential reflection, exploring the raw essence of sound in a modern urban landscape.", image: "/cover-arts/chapter2.jpg" },
+  { id: 3, title: "Aghata", category: "CHAOS: CHAPTER 3", description: "Intense industrial rhythms and complex textures defining the next stage of sonic evolution.", image: "/cover-arts/chapter3.jpg" },
+  { id: 4, title: "Pran", category: "CHAOS: CHAPTER 4", description: "Atmospheric textures meet hard-hitting percussion, creating a sense of life within the machine.", image: "/cover-arts/chapter4.jpg" },
+  { id: 5, title: "Karm", category: "CHAOS: CHAPTER 5", description: "The final descent into architectural acoustic decay, where sound meets silence.", image: "/cover-arts/chapter5.jpg" },
+  { id: 6, title: "Aarzoo", category: "KILLHOUSE MUSIC", description: "Emotional depth meets rhythmic precision in this latest soundscape exploration.", image: "/cover-arts/aarzoo.jpg" },
+  { id: 7, title: "Kasoor", category: "KILLHOUSE MUSIC", description: "Raw emotional honesty mixed with heavy synth elements, capturing the intersection of human movement and sound.", image: "/cover-arts/kasoor.jpg" },
+  { id: 8, title: "Lost Within", category: "KILLHOUSE MUSIC", description: "Immersive soundscapes reflecting cinematic exploration and the search for internal resonance.", image: "/cover-arts/lost-within.jpg" },
+  { id: 9, title: "Noor", category: "KILLHOUSE MUSIC", description: "Atmospheric soundscapes blending traditional elements with modern electronic textures.", image: "/cover-arts/noor.jpeg" },
+  { id: 10, title: "Pal Pal x Haseen x Ishq", category: "KILLHOUSE MUSIC", description: "A deep dive into cinematic sound design, blending organic textures with modern industrial precision.", image: "/cover-arts/mashup.jpg" },
 ];
 
 const PRESETS = [
@@ -87,79 +84,6 @@ const SIDE_QUESTS = [
   { id: 3, title: "ImAvatar Card", category: "KILLHOUSE MUSIC" },
   { id: 4, title: "Airistic Airlines", category: "KILLHOUSE MUSIC" },
 ];
-
-const MUSIC_IMAGES = [
-  "https://elated-bronze-x8zkclgmjj.edgeone.dev/Killhouse%20-%20Kasoor.png",
-  "https://concrete-copper-aqe9zmq49p.edgeone.dev/Chapter%201.png",
-  "https://excited-chocolate-bkoyi0fko5.edgeone.dev/Chapter%203%20(1).png",
-  "https://sick-emerald-tbxbsseams.edgeone.dev/Chapter%204%20(1).png",
-  "https://systematic-blue-kf0j1b4fce.edgeone.dev/Chapter%205%20(1).png",
-  "https://elated-bronze-x8zkclgmjj.edgeone.dev/Killhouse%20-%20Kasoor.png",
-  "https://detailed-yellow-vfmcmbhdnq.edgeone.dev/Killhouse%20-%20Lost%20Within%20(1).png",
-  "https://excited-chocolate-bkoyi0fko5.edgeone.dev/Chapter%203%20(1).png",
-  "https://systematic-blue-kf0j1b4fce.edgeone.dev/Chapter%205%20(1).png",
-];
-
-// New component for the falling cover art effect
-function FallingAssets({ active }: { active: boolean }) {
-  const [items, setItems] = useState<{ id: string | number; x: number; image: string; rotation: number; size: number; duration: number; delay: number; drift: number }[]>([]);
-
-  useEffect(() => {
-    if (!active) {
-      setItems([]);
-      return;
-    }
-
-    const interval = setInterval(() => {
-      const newItem = {
-        id: `falling-${Date.now()}-${Math.random()}`,
-        x: Math.random() * 100,
-        image: TRACKS[Math.floor(Math.random() * TRACKS.length)].image,
-        rotation: Math.random() * 360,
-        size: 60 + Math.random() * 80,
-        duration: 3 + Math.random() * 3, // 3s to 6s
-        delay: Math.random() * 0.2,
-        drift: (Math.random() - 0.5) * 15,
-      };
-      setItems(prev => [...prev.slice(-12), newItem]);
-    }, 600);
-
-    return () => clearInterval(interval);
-  }, [active]);
-
-  return (
-    <div className="fixed inset-0 pointer-events-none z-[60] overflow-hidden">
-      <AnimatePresence>
-        {items.map((item) => (
-          <motion.div
-            key={item.id}
-            initial={{ y: -200, x: `${item.x}vw`, opacity: 0, rotate: item.rotation, scale: 0.8 }}
-            animate={{ 
-              y: "110vh", 
-              x: `${item.x + item.drift}vw`,
-              opacity: [0, 1, 1, 0], 
-              rotate: item.rotation + 720,
-              scale: 1
-            }}
-            exit={{ opacity: 0, scale: 0.5 }}
-            transition={{ duration: item.duration, ease: "linear", delay: item.delay }}
-            style={{ width: item.size, height: item.size, willChange: 'transform, opacity' }}
-            className="absolute"
-          >
-            <div className="w-full h-full p-2">
-              <img 
-                src={item.image} 
-                alt="cover" 
-                className="w-full h-full object-cover rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-white/10" 
-                loading="lazy"
-              />
-            </div>
-          </motion.div>
-        ))}
-      </AnimatePresence>
-    </div>
-  );
-}
 
 
 
@@ -199,19 +123,17 @@ const RevealText = ({
       y: 0,
       rotateX: 0,
       transition: {
-        type: "spring" as const,
-        damping: 25,
-        stiffness: 200,
+        duration: 0.8,
+        ease: "easeOut" as const
       },
     },
     hidden: {
       opacity: 0,
-      y: 40,
-      rotateX: -90,
+      y: 20,
+      rotateX: -10,
       transition: {
-        type: "spring" as const,
-        damping: 25,
-        stiffness: 200,
+        duration: 0.8,
+        ease: "easeOut" as const
       },
     },
   };
@@ -254,12 +176,7 @@ export default function App() {
   const [hoveredVizColor, setHoveredVizColor] = useState<VisualizerColor | null>(null);
   const [aiVisuals, setAiVisuals] = useState<VisualAdjustments>({ particleSpeed: 1, colorHue: 0, patternComplexity: 4 });
   const [isAiLoading, setIsAiLoading] = useState(false);
-  const [isOnFire, setIsOnFire] = useState(false);
-  const [isDestructing, setIsDestructing] = useState(false);
-  const [isFireOnCooldown, setIsFireOnCooldown] = useState(false);
-  const [fireIntensity, setFireIntensity] = useState(5);
   const [isPageLoading, setIsPageLoading] = useState(true);
-  const [showStrobeWarning, setShowStrobeWarning] = useState(false);
 
   useEffect(() => {
     document.title = "KILLHOUSE MUSIC";
@@ -270,7 +187,6 @@ export default function App() {
   }, []);
 
   const [scrolled, setScrolled] = useState(false);
-  const fireAudioRef = useRef<HTMLAudioElement | null>(null);
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -287,6 +203,8 @@ export default function App() {
     return () => clearInterval(interval);
   }, [isPlaying]);
 
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 1024;
+
   const { scrollY, scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"]
@@ -297,63 +215,11 @@ export default function App() {
 
   useEffect(() => {
     const unsub = scrollY.on("change", (latest) => {
-      setScrolled(latest > 50);
+      const isScrolled = latest > 50;
+      setScrolled(prev => prev === isScrolled ? prev : isScrolled);
     });
     return () => unsub();
   }, [scrollY]);
-
-  useEffect(() => {
-    fireAudioRef.current = new Audio('https://legitimate-scarlet-3abu2xkowr.edgeone.dev/makabhosda_aag.mp3');
-  }, []);
-
-  useEffect(() => {
-    if (fireAudioRef.current) {
-        if (isOnFire) {
-          fireAudioRef.current.play();
-        } else {
-          fireAudioRef.current.pause();
-          fireAudioRef.current.currentTime = 0;
-        }
-    }
-    
-    if (isOnFire) {
-      const timer = setTimeout(() => {
-        handleFireToggle();
-      }, 7000); // Auto-deactivate after 7 seconds
-      return () => clearTimeout(timer);
-    }
-  }, [isOnFire]);
-
-  const handleFireToggle = () => {
-    if (isOnFire) {
-      setIsOnFire(false);
-      setIsDestructing(false);
-      setIsFireOnCooldown(true);
-      setTimeout(() => {
-        setIsFireOnCooldown(false);
-      }, 3000); // 3 second cooldown after deactivation
-    } else if (!isFireOnCooldown) {
-      setIsOnFire(true);
-      setIsDestructing(true);
-    }
-  };
-
-  useEffect(() => {
-    if (isOnFire && fireIntensity >= 8) {
-      // Keep it on if intensity is high
-      setIsDestructing(true);
-    }
-  }, [fireIntensity, isOnFire]);
-
-  useEffect(() => {
-    const unsub = scrollYProgress.on("change", (latest) => {
-      if (fireAudioRef.current && isOnFire) {
-        // Muffle fire audio too if scrolling deep
-        fireAudioRef.current.volume = latest > 0.1 ? Math.max(0.1, 1 - (latest * 2)) : 1;
-      }
-    });
-    return () => unsub();
-  }, [scrollYProgress, isOnFire]);
 
   return (
     <div ref={containerRef} className="relative min-h-screen bg-black text-[#d1d1d1] font-sans overflow-x-hidden">
@@ -363,10 +229,6 @@ export default function App() {
         style={{ scaleX: scrollYProgress }}
       />
 
-      <CustomCursor />
-      <FireEffect active={isOnFire} intensity={fireIntensity} />
-      <DestructionEffect active={isDestructing} intensity={fireIntensity} />
-      <FallingAssets active={isOnFire} />
       <AmbientBackground isPlaying={isPlaying} />
       <AmbientParticles isPlaying={isPlaying} />
       <HeartbeatWaves />
@@ -422,7 +284,7 @@ export default function App() {
             className="flex items-center gap-1.5 sm:gap-2 text-[12px] sm:text-base md:text-lg font-sans font-black uppercase text-red-600 tracking-tighter"
           >
             <img 
-              src="https://bumpy-brown-ssbga3sig7.edgeone.dev/Logo%20(White).png" 
+              src="/cover-arts/logo.png" 
               alt="KILLHOUSE logo" 
               className="w-10 h-10 sm:w-14 sm:h-14 object-contain"
             />
@@ -430,59 +292,7 @@ export default function App() {
           </motion.a>
         </div>
 
-        <div className="flex-1 flex justify-center items-center gap-4">
-          {isOnFire && (
-            <input 
-              type="range" 
-              min="1" 
-              max="10" 
-              value={fireIntensity} 
-              onChange={(e) => setFireIntensity(Number(e.target.value))} 
-              className="w-20 h-1 bg-white/20 accent-orange-500 rounded-lg appearance-none cursor-pointer"
-              title="Spark Intensity"
-            />
-          )}
-          <div 
-            className="relative flex flex-col items-center"
-            onMouseEnter={() => setShowStrobeWarning(true)}
-            onMouseLeave={() => setShowStrobeWarning(false)}
-          >
-            <AnimatePresence>
-              {showStrobeWarning && (
-                <motion.div 
-                  initial={{ opacity: 0, y: -10, scale: 0.9 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -10, scale: 0.9 }}
-                  className="absolute top-full mt-10 left-1/2 -translate-x-1/2 w-56 p-3 bg-red-600 text-white text-[9px] font-black uppercase tracking-[0.2em] rounded-lg shadow-[0_0_30px_rgba(220,38,38,0.5)] z-[200] pointer-events-none text-center border border-white/20 leading-relaxed"
-                >
-                  <div className="flex items-center justify-center gap-2 mb-1">
-                    <Zap size={10} className="text-white fill-white" />
-                    <span>Epilepsy Warning</span>
-                    <Zap size={10} className="text-white fill-white" />
-                  </div>
-                  Alerts viewers or gamers with epilepsy to potentially seizure-inducing strobes, flashes, or patterns
-                </motion.div>
-              )}
-            </AnimatePresence>
-            <div className="scale-[0.22] sm:scale-[0.3] md:scale-[0.35] origin-center -my-20">
-              <label className="uiverse-switch">
-                <input 
-                  type="checkbox" 
-                  checked={isOnFire} 
-                  onChange={handleFireToggle} 
-                  disabled={isFireOnCooldown} 
-                />
-                <div className="button">
-                  <div className="light"></div>
-                  <div className="dots"></div>
-                  <div className="characters"></div>
-                  <div className="shine"></div>
-                  <div className="shadow"></div>
-                </div>
-              </label>
-            </div>
-          </div>
-        </div>
+        <div className="flex-1" />
         
         <div className="flex-1 flex justify-end gap-4 sm:gap-12 items-center">
           <div className="hidden lg:flex gap-8 text-[10px] uppercase tracking-[0.2em] font-semibold opacity-60">
