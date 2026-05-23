@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, useAnimationFrame, useMotionValue, useSpring } from 'motion/react';
 import { Play } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { getCoverArt } from "../images";
 
 const AlbumArtCard = React.memo(({ title, image, index, total, radius }: any) => {
   const angle = (index / total) * 360;
@@ -18,7 +19,7 @@ const AlbumArtCard = React.memo(({ title, image, index, total, radius }: any) =>
     >
       <div className="w-full h-full relative group-hover:scale-110 transition-transform duration-500">
         <img 
-          src={image} 
+          src={getCoverArt(image)} 
           alt={title} 
           className="w-full h-full object-cover rounded-xl border border-white/10 shadow-2xl" 
           loading="lazy"
@@ -55,7 +56,7 @@ export const TrackCard = ({ title, genre, duration, color, image }: any) => {
     >
       <div className="flex items-center justify-between mb-8">
         <div className={cn("w-24 h-24 bg-black/40 rounded-2xl overflow-hidden border", borderColors[color] || "border-white/10")}>
-          <img src={image} alt={title} className="w-full h-full object-cover transition-all duration-700" loading="lazy" />
+          <img src={getCoverArt(image)} alt={title} className="w-full h-full object-cover transition-all duration-700" loading="lazy" />
         </div>
         <span className="text-[10px] font-mono text-white/20 uppercase tracking-[0.2em]">{duration}</span>
       </div>

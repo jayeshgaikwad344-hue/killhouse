@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { Play, Pause, SkipBack, SkipForward, Volume2, Music as MusicIcon } from "lucide-react";
 import { useState, useRef, useEffect, ChangeEvent } from "react";
 import Tooltip from "./Tooltip";
+import { getCoverArt } from "../images";
 
 export const TRACKS = [
   { id: 1, title: "Chakravyuh", artist: "KILLHOUSE", album: "CHAOS: CH 1", description: "Minimalist trap beats combined with heavy soundscapes.", url: "https://golden-maroon-gst9h0fitx.edgeone.dev/chakravyuha%20killhouse%20music.mp3", image: "/cover-arts/chapter1.jpg" },
@@ -447,7 +448,7 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
                       ease: "easeInOut"
                     }
                   }}
-                src={currentTrack.image} 
+                src={getCoverArt(currentTrack.image)} 
                 className="w-full h-full object-cover rounded-lg"
               />
             </div>
@@ -569,7 +570,7 @@ export default function MusicPlayer({ currentTrackIndex, isPlaying, onTrackChang
                   >
                     <div className="relative w-8 h-8 flex-shrink-0">
                       <img 
-                        src={track.image} 
+                        src={getCoverArt(track.image)} 
                         alt={track.title} 
                         className={`w-full h-full object-cover rounded shadow-md transition-transform duration-500 group-hover/track:scale-110 ${
                           currentTrackIndex === index ? "brightness-110" : "brightness-50"

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { Play, Pause, SkipBack, SkipForward } from "lucide-react";
 import { TRACKS } from "./MusicPlayer";
 import Tooltip from "./Tooltip";
+import { getCoverArt } from "../images";
 
 interface MiniPlayerProps {
   currentTrackIndex: number;
@@ -42,7 +43,7 @@ export default function MiniPlayer({
             key={currentTrack.image}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            src={currentTrack.image}
+            src={getCoverArt(currentTrack.image)}
             className="w-full h-full object-cover"
           />
         </div>

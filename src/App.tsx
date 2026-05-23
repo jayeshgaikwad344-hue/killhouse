@@ -35,6 +35,7 @@ import AmbientParticles from "./components/AmbientParticles";
 import HeartbeatWaves from "./components/HeartbeatWaves";
 import SmoothScroll from "./components/SmoothScroll";
 import SpeederLoader from "./components/SpeederLoader";
+import { getCoverArt } from "./images";
 
 const PROJECTS = [
   { id: 1, title: "Chakravyuh", category: "CHAOS: CHAPTER 1", description: "Minimalist trap beats combined with heavy, metallic industrial soundscapes, exploring harsh textures in contemporary music.", image: "/cover-arts/chapter1.jpg" },
@@ -284,7 +285,7 @@ export default function App() {
             className="flex items-center gap-1.5 sm:gap-2 text-[12px] sm:text-base md:text-lg font-sans font-black uppercase text-red-600 tracking-tighter"
           >
             <img 
-              src="/cover-arts/logo.png" 
+              src={getCoverArt("/cover-arts/logo.png")} 
               alt="KILLHOUSE logo" 
               className="w-10 h-10 sm:w-14 sm:h-14 object-contain"
             />
@@ -427,7 +428,7 @@ export default function App() {
                     <motion.img 
                       whileHover={{ scale: 1.05 }}
                       transition={{ duration: 1.5, ease: [0.33, 1, 0.68, 1] as any }}
-                      src={project.image} 
+                      src={getCoverArt(project.image)} 
                       alt={project.title}
                       className={`w-full h-full object-cover transition-all duration-1000 ${
                         currentTrackIndex === (i % TRACKS.length) && isPlaying 
@@ -620,7 +621,7 @@ export default function App() {
                     {/* Physical Sleeve Effect */}
                     <div className="absolute inset-0 z-10 pointer-events-none bg-gradient-to-tr from-white/20 via-transparent to-white/10 opacity-30" />
                     <img 
-                      src={track.image} 
+                      src={getCoverArt(track.image)} 
                       alt={track.title} 
                       className={`w-full h-full object-cover transition-all duration-700 ${
                         currentTrackIndex === i ? "scale-110 opacity-100" : "opacity-60 group-hover:opacity-100 group-hover:scale-110"
